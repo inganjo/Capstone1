@@ -90,6 +90,9 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
+        // inventory
+        private Inventory inventory;
+
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
@@ -140,6 +143,11 @@ namespace StarterAssets
             {
                 _cameraRoot = transform.GetChild(0).gameObject;
             }
+
+            if (inventory == null)
+            {
+                inventory=GetComponent<Inventory>();
+            }
         }
 
         private void Start()
@@ -168,6 +176,7 @@ namespace StarterAssets
 
             JumpAndGravity();
             GroundedCheck();
+            UseItem();
             Crouch();
             Move();
         }
@@ -289,7 +298,45 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
+        private void UseItem()
+        {
+            if (Grounded) {
+                if (_input.item1) {
+                    ItemHold(1);
+                }
+                if (_input.item2) {
+                    ItemHold(2);
+                }
+                if (_input.item3) {
+                    ItemHold(3);
+                }
+                if (_input.item4) {
+                    ItemHold(4);
+                }
+            }
+        }
 
+        private void ItemHold(int slotNumber) 
+        {
+            if (Inventory.instance.items.Count >= slotNumber)
+                {
+                    Item selectedItem = Inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
+                    if (selectedItem != null)
+                    {
+                        // 아이템을 손에 들기 위한 로직을 여기에 추가
+                        Debug.Log($"{selectedItem.itemName}을(를) 손에 들었습니다.");
+                        // 예: 아이템을 캐릭터의 손에 장착하는 코드 추가
+                    }
+                    else
+                    {
+                        Debug.Log("해당 슬롯에 아이템이 없습니다.");
+                    }
+                }
+            else
+            {
+                Debug.Log("해당 슬롯에 아이템이 없습니다.");
+            }
+        }
         private void Crouch()
         {
             if (Grounded)
