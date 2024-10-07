@@ -316,22 +316,27 @@ namespace StarterAssets
             }
         }
 
-        private void ItemHold(int slotNumber) 
+        private void ItemHold(int slotNumber)
         {
             if (Inventory.instance.items.Count >= slotNumber)
+            {
+                Item selectedItem = Inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
+                if (selectedItem != null)
                 {
-                    Item selectedItem = Inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
-                    if (selectedItem != null)
+                    if (selectedItem.itemType == ItemType.OneHand)
                     {
-                        // 아이템을 손에 들기 위한 로직을 여기에 추가
-                        Debug.Log($"{selectedItem.itemName}을(를) 손에 들었습니다.");
-                        // 예: 아이템을 캐릭터의 손에 장착하는 코드 추가
+                        //한손 애니메이션
                     }
-                    else
+                    else if (selectedItem.itemType == ItemType.TwoHand)
                     {
-                        Debug.Log("해당 슬롯에 아이템이 없습니다.");
+                        //두손 애니메이션
                     }
                 }
+                else
+                {
+                    Debug.Log("해당 슬롯에 아이템이 없습니다.");
+                }
+            }
             else
             {
                 Debug.Log("해당 슬롯에 아이템이 없습니다.");
