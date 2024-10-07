@@ -35,13 +35,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("OnJoinRandomFailed()가 호출되었다.");
+        Debug.Log("OnJoinRandomFailed()");
         PhotonNetwork.CreateRoom("Room",new RoomOptions{ MaxPlayers = maxPlayersPerRoom});
     }
 
     public  override void OnJoinedRoom()
     {
-        Debug.Log("튜토리얼 런쳐: OnJoinedRoom()이 호출되었으며, 클라이언트는 이제 room 안에 접속되었다.");
+        Debug.Log("OnJoinedRoom()이 작동, 클라이언트 room 접속 완료");
         if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
             Debug.Log("Room에 접속하였습니다.");
