@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/Test Scene.unity.meta
 guid: 177f0281457d4804fabe9c0f74be0463
+========
+guid: e9017d5f96b9f09489b4b37e1d6eb914
+>>>>>>>> main:Assets/StarterAssets/ThirdPersonController/Scenes/Playground.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
