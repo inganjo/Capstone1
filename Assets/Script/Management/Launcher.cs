@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 namespace Com.MyCompany.MyGame
 {
@@ -10,43 +11,37 @@ public class Launcher : MonoBehaviourPunCallbacks
 {
 
     #region Private Serializable Fields
+
     [SerializeField]
-    private byte maxPlayersPerRoom = 2;
+    private TMP_InputField NickName_input;
     #endregion
 
     #region Private Fields
     string gameVersion = "1";
-    bool isConnecting;
+
     #endregion
 
-    #region MonoBehaviourPunCallbacks Callbacks
-    public override void OnConnectedToMaster()
-    {
-        if(isConnecting)
+        #region MonoBehaviourPunCallbacks Callbacks
+        public override void OnConnectedToMaster()
         {
-        PhotonNetwork.JoinRandomRoom();
-        Debug.Log("OnConnectedToMaster 함수 작동");
+            base.OnConnectedToMaster();
+            Debug.Log("OnConnectedToMaster 작동: 마스터 서버 접속");
+            OnJoinedLobby();
         }
-    }
+
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.LogWarningFormat("OnDisconnceted 발동 원인: ",cause);
     }
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        Debug.Log("OnJoinRandomFailed()");
-        PhotonNetwork.CreateRoom("Room",new RoomOptions{ MaxPlayers = maxPlayersPerRoom});
-    }
+  
 
-    public  override void OnJoinedRoom()
+    public  override void OnJoinedLobby()
     {
-        Debug.Log("OnJoinedRoom()이 작동, 클라이언트 room 접속 완료");
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        {
-            Debug.Log("Room에 접속하였습니다.");
-        }
-        PhotonNetwork.LoadLevel("alpha 1");
+        base.OnJoinedLobby();
+        Debug.Log("OnJoinedLobby(): 로비로 이동합니다.");
+        PhotonNetwork.NickName = NickName_input.text;
+        PhotonNetwork.LoadLevel("Lobby");
     }
     #endregion
 
@@ -72,17 +67,9 @@ public class Launcher : MonoBehaviourPunCallbacks
 
     public void Connect()
     {
-        isConnecting = true;
 
-        if(PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.JoinRandomRoom();
-        }
-        else
-        {
             PhotonNetwork.GameVersion = gameVersion;
             PhotonNetwork.ConnectUsingSettings();
-        }
     }
 
     // Update is called once per frame
