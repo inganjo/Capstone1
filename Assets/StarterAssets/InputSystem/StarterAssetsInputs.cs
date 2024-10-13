@@ -53,7 +53,7 @@ namespace StarterAssets
 			CrouchInput(value.isPressed);
 		}
 
-		public void OnItem1(InputValue value)
+/*		public void OnItem1(InputValue value)
 		{
 			Item1Input(value.isPressed);
 		}
@@ -71,7 +71,8 @@ namespace StarterAssets
 		public void OnItem4(InputValue value)
 		{
 			Item4Input(value.isPressed);
-		}
+		}*/
+
 #endif
 
 
