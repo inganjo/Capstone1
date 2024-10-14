@@ -9,7 +9,10 @@ EditorBuildSettings:
     path: Assets/Scene/Launcher.unity
     guid: 680003627c614de47b570cf8c4196a80
   - enabled: 1
-    path: Assets/Scene/alpha 1.unity
-    guid: ccb755f95d0046041b28080103d48663
+    path: Assets/Scenes/GH3Floor.unity
+    guid: 8097daf1bae96794a9745874654ba297
+  - enabled: 1
+    path: Assets/Scenes/GH2Floor.unity
+    guid: 6de71c455e19b0e439d3863c8ce73380
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7, type: 2}
