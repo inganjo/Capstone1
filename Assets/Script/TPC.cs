@@ -12,7 +12,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM 
     [RequireComponent(typeof(PlayerInput))]
 #endif
-    public class ThirdPersonController : MonoBehaviour
+    public class TPC : MonoBehaviour
     {
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
@@ -20,6 +20,12 @@ namespace StarterAssets
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
+
+        [Tooltip("Crouch speed of the character in m/s")]
+        public float CrouchSpeed = 1.0f;
+
+        [Tooltip("TwoHand Holding speed coefficient of the character in m/s")]
+        public float TwoHandSpeed = 0.5f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -49,7 +55,8 @@ namespace StarterAssets
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
-
+        private bool isHold = false;
+        private int equipNum;
         [Tooltip("Useful for rough ground")]
         public float GroundedOffset = -0.14f;
 
@@ -87,6 +94,9 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
+        // inventory
+        private Inventory inventory;
+
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
@@ -97,6 +107,9 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+        private int _animIDCrouch;
+        private int _animIDTwoHanded;
+        private int _animIDOneHanded;
 
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
@@ -105,6 +118,7 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+        private GameObject _cameraRoot;
 
         private const float _threshold = 0.01f;
 
@@ -129,6 +143,16 @@ namespace StarterAssets
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+            }
+
+            if (_cameraRoot == null)
+            {
+                _cameraRoot = transform.GetChild(0).gameObject;
+            }
+
+            if (inventory == null)
+            {
+                inventory=GetComponent<Inventory>();
             }
         }
 
@@ -155,9 +179,10 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-
             JumpAndGravity();
             GroundedCheck();
+            UseItem();
+            Crouch();
             Move();
         }
 
@@ -173,6 +198,9 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDCrouch = Animator.StringToHash("Crouch");
+            _animIDTwoHanded=Animator.StringToHash("TwoHanded");
+            _animIDOneHanded=Animator.StringToHash("OneHanded");
         }
 
         private void GroundedCheck()
@@ -213,8 +241,16 @@ namespace StarterAssets
 
         private void Move()
         {
+            float targetSpeed;
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            if (_animator.GetBool(_animIDTwoHanded))
+            {
+                targetSpeed=(_input.crouch ? CrouchSpeed : MoveSpeed)*TwoHandSpeed;
+            }
+            else
+            {
+                targetSpeed = _input.crouch ? CrouchSpeed : _input.sprint ? SprintSpeed : MoveSpeed;
+            }
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -279,9 +315,134 @@ namespace StarterAssets
             }
         }
 
-        private void JumpAndGravity()
+        private int CheckInput()
+        {
+            if (Input.GetKeyUp(KeyCode.Alpha1)) // 숫자 1 키를 뗄 때
+            {
+                return 1; 
+            }
+            else if (Input.GetKeyUp(KeyCode.Alpha2)) // 숫자 2 키를 뗄 때
+            {
+                return 2; 
+            }
+            else if (Input.GetKeyUp(KeyCode.Alpha3)) // 숫자 3 키를 뗄 때
+            {
+                return 3; 
+            }
+            else if (Input.GetKeyUp(KeyCode.Alpha4)) // 숫자 4 키를 뗄 때
+            {
+                return 4; 
+            }         
+            return -1;
+        }
+
+        private void UseItem()
+        {
+            int inputSlot=CheckInput();
+            if (Grounded) {
+                if (inputSlot >= 0 && inputSlot <= Inventory.instance.items.Count)
+                {
+                    if (!isHold)
+                    {
+                        // 아이템 들기 동작
+                        ItemHold(inputSlot);
+                        equipNum = inputSlot; // 현재 들고 있는 아이템 슬롯 번호 갱신
+                    }
+                    else if (isHold && inputSlot == equipNum)
+                    {
+                        // 아이템 내려놓기
+                        ItemPutDown();
+                        equipNum=-2;
+                    }
+                    else
+                    {
+                        // 다른 아이템으로 교체
+                        ItemPutDown();
+                        ItemHold(inputSlot);
+                        equipNum = inputSlot;
+                    }
+                }
+                else
+                {
+                    
+                }
+            }
+        }
+
+        private void ItemHold(int slotNumber)
+        {
+            if (Inventory.instance.items.Count >= slotNumber)
+            {
+                Item selectedItem = Inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
+                if (selectedItem != null)
+                {
+                    if (selectedItem.itemType == ItemType.OneHand)
+                    {
+                        _animator.SetBool(_animIDOneHanded,true);
+                    }
+                    else if (selectedItem.itemType == ItemType.TwoHand)
+                    {
+                        _animator.SetBool(_animIDTwoHanded,true);
+                    }
+                    isHold=true;
+                }
+                else
+                {
+                    Debug.Log("해당 슬롯에 아이템이 없습니다.");
+                }
+            }
+            else
+            {
+                Debug.Log("해당 슬롯에 아이템이 없습니다.");
+            }
+        }
+        private void ItemPutDown()
+        {
+            if (_animator.GetBool(_animIDOneHanded)) _animator.SetBool(_animIDOneHanded,false);
+            if (_animator.GetBool(_animIDTwoHanded)) _animator.SetBool(_animIDTwoHanded,false);
+            isHold=false;
+        }
+
+        private void Crouch()
         {
             if (Grounded)
+            {
+                if (_input.crouch)
+                {
+                    if(_animator.GetBool(_animIDTwoHanded)){
+                        _controller.center=new Vector3(0,0.6f,0);
+                        _controller.height=1.2f;
+                        Vector3 tmpTrans=_cameraRoot.transform.position;
+                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,1.1f,tmpTrans.z);
+                    }
+                    else{
+                        _controller.center=new Vector3(0,0.44f,0);
+                        _controller.height=0.8f;
+                        Vector3 tmpTrans=_cameraRoot.transform.position;
+                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,0.7f,tmpTrans.z);
+                    }
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDCrouch, true);
+                    }
+                }
+                else
+                {
+                    _controller.center=new Vector3(0,0.99f,0);
+                    _controller.height=1.8f;
+                    Vector3 tmpTrans=_cameraRoot.transform.position;
+                    _cameraRoot.transform.position=new Vector3(tmpTrans.x,1.5f,tmpTrans.z);
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDCrouch, false);
+                    }
+                }
+            }
+        }
+        
+        private void JumpAndGravity()
+        {
+            if (Grounded && !(_animator.GetBool(_animIDTwoHanded)) && !(_animator.GetBool(_animIDCrouch)))
             {
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
