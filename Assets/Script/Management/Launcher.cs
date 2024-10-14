@@ -26,7 +26,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         {
             base.OnConnectedToMaster();
             Debug.Log("OnConnectedToMaster 작동: 마스터 서버 접속");
-            OnJoinedLobby();
+            PhotonNetwork.JoinLobby();
         }
 
 

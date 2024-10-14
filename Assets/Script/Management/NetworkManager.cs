@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;               // Unity 엔진 기능 사용
 using UnityEngine.UI;            // Unity UI 기능 사용
 using static UnityEngine.EventSystems.PointerEventData;  // 유니티의 이벤트 시스템 사용 (입력 이벤트 관련)
+using UnityEngine.SceneManagement;
+using StarterAssets;
 
 public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehaviourPunCallbacks 상속 (Photon 관련 콜백을 받기 위해)
 {
@@ -15,7 +17,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
    [SerializeField] Button CreateRoom;
    [SerializeField] GameObject roomListItem;
    public Transform rtContent;
+   public GameObject player;
    Dictionary<string, RoomInfo> dicRoomInfo = new Dictionary<string, RoomInfo>();
+
+
+   void Awake(){
+      PhotonNetwork.AutomaticallySyncScene = true;
+      DontDestroyOnLoad(this.gameObject);
+   }
 
    void Start()
    {
@@ -23,14 +32,21 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
       MaxRoom.onValueChanged.AddListener(OnPlayerNumberChange);
       ConnectRoom.onClick.AddListener(OnClickConnectRoom);
       CreateRoom.onClick.AddListener(OnClickCreateRoom);
+      SceneManager.sceneLoaded +=OnSceneLoaded;
    }
-
+   void Update()
+   {
+      // Debug.Log(PhotonNetwork.InLobby);
+   }
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("UpdateRoomListItem() 호출됨. 방 개수: " + roomList.Count);
+        Debug.Log("OnRoomListUpdate() success");
         base.OnRoomListUpdate(roomList);
         DeleteRoomListItem();
         UpdateRoomListItem(roomList);
         CreateRoomListItem();
+
     }
     void SelectRoomItem(string roomName)
     {
@@ -38,6 +54,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
     }
     void DeleteRoomListItem()
     {
+      Debug.Log("DeleteRoomListItem() success");
       foreach(Transform tr in rtContent)
       {
          Destroy(tr.gameObject);
@@ -45,6 +62,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
     }
     void UpdateRoomListItem(List<RoomInfo> roomList)
     {
+      Debug.Log("UpdateRoomListItem() success");
       foreach( RoomInfo info in roomList)
       {
          if(dicRoomInfo.ContainsKey(info.Name))
@@ -62,12 +80,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
 
     void CreateRoomListItem()
     {
+      Debug.Log("CreateRoomListItem() success");
       foreach(RoomInfo info in dicRoomInfo.Values)
       {
          GameObject go = Instantiate(roomListItem, rtContent);
          RoomListItem item = go.GetComponent<RoomListItem>();
          item.SetInfo(info.Name, info.PlayerCount, info.MaxPlayers);
          item.onDelegate = SelectRoomItem;
+         Debug.Log($"프리팹 위치: {go.transform.localPosition}");
       }
     }
     void OnNameValueChanged(string s)
@@ -87,12 +107,43 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
       }
    }
 
-   void OnClickCreateRoom(){
+   void OnClickCreateRoom(){ //CreateRoom 이후에 Photon은 자동적으로 방에 Join 시킨다.
       RoomOptions options = new RoomOptions();
       options.MaxPlayers = int.Parse(MaxRoom.text);
       options.IsVisible = true;
       options.IsOpen = true;
       PhotonNetwork.CreateRoom(RoomName.text,options);
+   }
+
+    void SpawnPlayer()
+    {
+        if(PhotonNetwork.LocalPlayer == null || !PhotonNetwork.InRoom)
+        {
+            Debug.LogWarning("Player not in the room");
+            return;
+        }
+        else{
+            if (ThirdPersonController.LocalPlayerInstance == null)
+            {
+                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
+                PhotonNetwork.Instantiate(this.player.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+            }
+           
+        }
+    }
+
+   private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("OnSceneLoaded Active");
+        if(PhotonNetwork.InRoom)
+        {
+            SpawnPlayer();
+        }
+    }
+   void OnDestroy()
+   {
+      Debug.Log("GameManager destroyed!");// 씬 전환 전 리스너 해제
+      SceneManager.sceneLoaded -=OnSceneLoaded;
    }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
@@ -115,6 +166,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
     {
         base.OnJoinedRoom();
         Debug.Log("OnJoinedRoom() success");
+        PhotonNetwork.LoadLevel("alpha");
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {

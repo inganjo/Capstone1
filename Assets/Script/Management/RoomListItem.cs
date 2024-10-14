@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using TMPro;
 
 public class RoomListItem : MonoBehaviour
 {
-    public Text roomInfo;
+    public TMP_Text roomInfo;
     // Start is called before the first frame update
     public Action<string> onDelegate;
     public void SetInfo(string roomName, int currPlayer, int maxPlayer)

@@ -1,6 +1,12 @@
 ﻿ using UnityEngine;
-#if ENABLE_INPUT_SYSTEM 
+using Photon.Pun.Demo.PunBasics;
+using Unity.VisualScripting;
+
+
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using Photon.Pun;               // Photon Unity Networking 기능을 사용하기 위해 필요
+using Photon.Realtime; 
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -105,6 +111,9 @@ namespace StarterAssets
         private int _animIDMotionSpeed;
         private int _animIDCrouch;
 
+        //photon
+        public static GameObject LocalPlayerInstance;
+
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -133,6 +142,11 @@ namespace StarterAssets
 
         private void Awake()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if(photonView.IsMine)
+            {
+                PlayerManager.LocalPlayerInstance = this.gameObject;
+            }
             // get a reference to our main camera
             if (_mainCamera == null)
             {
@@ -148,6 +162,7 @@ namespace StarterAssets
             {
                 inventory=GetComponent<Inventory>();
             }
+            DontDestroyOnLoad(this.gameObject);
         }
 
         private void Start()
@@ -172,6 +187,8 @@ namespace StarterAssets
 
         private void Update()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if(photonView.IsMine &&PhotonNetwork.IsConnected == true)
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
