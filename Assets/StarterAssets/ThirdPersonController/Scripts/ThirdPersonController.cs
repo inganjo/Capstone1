@@ -56,7 +56,7 @@ namespace StarterAssets
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
         private bool isHold = false;
-        private int itemSlot;
+        private int equipNum;
         [Tooltip("Useful for rough ground")]
         public float GroundedOffset = -0.14f;
 
@@ -179,7 +179,6 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-            CheckInput();
             JumpAndGravity();
             GroundedCheck();
             UseItem();
@@ -318,34 +317,21 @@ namespace StarterAssets
 
         private int CheckInput()
         {
-/*            if (_input.item1) {
-                return 1;
-            }
-            if (_input.item2) {
-                return 2;
-            }
-            if (_input.item3) {
-                return 3;
-            }
-            if (_input.item4) {
-                return 4;
-            }
-            return -1;  */
             if (Input.GetKeyUp(KeyCode.Alpha1)) // 숫자 1 키를 뗄 때
-            {
-                return 0; 
-            }
-            else if (Input.GetKeyUp(KeyCode.Alpha2)) // 숫자 2 키를 뗄 때
             {
                 return 1; 
             }
-            else if (Input.GetKeyUp(KeyCode.Alpha3)) // 숫자 3 키를 뗄 때
+            else if (Input.GetKeyUp(KeyCode.Alpha2)) // 숫자 2 키를 뗄 때
             {
                 return 2; 
             }
-            else if (Input.GetKeyUp(KeyCode.Alpha4)) // 숫자 4 키를 뗄 때
+            else if (Input.GetKeyUp(KeyCode.Alpha3)) // 숫자 3 키를 뗄 때
             {
                 return 3; 
+            }
+            else if (Input.GetKeyUp(KeyCode.Alpha4)) // 숫자 4 키를 뗄 때
+            {
+                return 4; 
             }         
             return -1;
         }
@@ -354,30 +340,31 @@ namespace StarterAssets
         {
             int inputSlot=CheckInput();
             if (Grounded) {
-                if (inputSlot >= 0 && inputSlot < Inventory.instance.items.Count)
+                if (inputSlot >= 0 && inputSlot <= Inventory.instance.items.Count)
                 {
                     if (!isHold)
                     {
                         // 아이템 들기 동작
                         ItemHold(inputSlot);
-                        itemSlot = inputSlot; // 현재 들고 있는 아이템 슬롯 번호 갱신
+                        equipNum = inputSlot; // 현재 들고 있는 아이템 슬롯 번호 갱신
                     }
-                    else if (isHold && inputSlot == itemSlot)
+                    else if (isHold && inputSlot == equipNum)
                     {
                         // 아이템 내려놓기
                         ItemPutDown();
+                        equipNum=-2;
                     }
                     else
                     {
                         // 다른 아이템으로 교체
                         ItemPutDown();
                         ItemHold(inputSlot);
-                        itemSlot = inputSlot;
+                        equipNum = inputSlot;
                     }
                 }
                 else
                 {
-                    Debug.LogWarning("Invalid slot number: " + inputSlot);
+                    
                 }
             }
         }
