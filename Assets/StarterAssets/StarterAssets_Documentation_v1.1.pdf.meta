@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/GH Scene.unity.meta
+guid: 8cda2b3dd8c6389469b862ad1c6a418d
+========
 guid: b5f957873a5b82042967195ffffc9063
+>>>>>>>> main:Assets/StarterAssets/StarterAssets_Documentation_v1.1.pdf.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
