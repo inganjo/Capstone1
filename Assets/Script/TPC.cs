@@ -110,7 +110,6 @@ namespace StarterAssets
         private int _animIDCrouch;
         private int _animIDTwoHanded;
         private int _animIDOneHanded;
-
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -413,13 +412,13 @@ namespace StarterAssets
                         _controller.center=new Vector3(0,0.6f,0);
                         _controller.height=1.2f;
                         Vector3 tmpTrans=_cameraRoot.transform.position;
-                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,1.1f,tmpTrans.z);
+                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.1f,tmpTrans.z);
                     }
                     else{
                         _controller.center=new Vector3(0,0.44f,0);
                         _controller.height=0.8f;
                         Vector3 tmpTrans=_cameraRoot.transform.position;
-                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,0.7f,tmpTrans.z);
+                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+0.7f,tmpTrans.z);
                     }
                     if (_hasAnimator)
                     {
@@ -431,7 +430,7 @@ namespace StarterAssets
                     _controller.center=new Vector3(0,0.99f,0);
                     _controller.height=1.8f;
                     Vector3 tmpTrans=_cameraRoot.transform.position;
-                    _cameraRoot.transform.position=new Vector3(tmpTrans.x,1.5f,tmpTrans.z);
+                    _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.5f,tmpTrans.z);
                     if (_hasAnimator)
                     {
                         _animator.SetBool(_animIDCrouch, false);
@@ -442,7 +441,7 @@ namespace StarterAssets
         
         private void JumpAndGravity()
         {
-            if (Grounded && !(_animator.GetBool(_animIDTwoHanded)) && !(_animator.GetBool(_animIDCrouch)))
+            if (Grounded)
             {
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
@@ -461,7 +460,7 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f && !(_animator.GetBool(_animIDTwoHanded)) && !(_animator.GetBool(_animIDCrouch)))
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
