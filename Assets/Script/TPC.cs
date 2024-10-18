@@ -1,4 +1,5 @@
-﻿ using UnityEngine;
+ using UnityEngine;
+ using System.Collections;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -9,6 +10,7 @@ using UnityEngine.InputSystem;
 namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
+    
 #if ENABLE_INPUT_SYSTEM 
     [RequireComponent(typeof(PlayerInput))]
 #endif
@@ -23,6 +25,9 @@ namespace StarterAssets
 
         [Tooltip("Crouch speed of the character in m/s")]
         public float CrouchSpeed = 1.0f;
+
+        [Tooltip("Push speed of the character in m/s")]
+        public float PushSpeed = 0.5f;
 
         [Tooltip("TwoHand Holding speed coefficient of the character in m/s")]
         public float TwoHandSpeed = 0.5f;
@@ -55,7 +60,7 @@ namespace StarterAssets
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
         public bool Grounded = true;
-        private bool isHold = false;
+        public bool isHold = false;
         private int equipNum;
         [Tooltip("Useful for rough ground")]
         public float GroundedOffset = -0.14f;
@@ -101,6 +106,14 @@ namespace StarterAssets
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
 
+        //BasicRigidbody Push
+        public LayerMask pushLayers;
+        public bool canPush;
+        private bool isPushing = false;
+        public float rayDistance = 0.5f;  // 레이캐스트 거리
+        public LayerMask pushableLayer;   // Pushable 물체의 레이어
+        [Range(0.1f, 5f)] public float strength = 1.1f;
+
         // animation IDs
         private int _animIDSpeed;
         private int _animIDGrounded;
@@ -110,6 +123,8 @@ namespace StarterAssets
         private int _animIDCrouch;
         private int _animIDTwoHanded;
         private int _animIDOneHanded;
+        private int _animIDIsPush;
+        private int _animIDStopPush;
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -183,6 +198,7 @@ namespace StarterAssets
             UseItem();
             Crouch();
             Move();
+            CheckCanPush();
         }
 
         private void LateUpdate()
@@ -200,6 +216,84 @@ namespace StarterAssets
             _animIDCrouch = Animator.StringToHash("Crouch");
             _animIDTwoHanded=Animator.StringToHash("TwoHanded");
             _animIDOneHanded=Animator.StringToHash("OneHanded");
+            _animIDIsPush=Animator.StringToHash("IsPush");
+            _animIDStopPush=Animator.StringToHash("StopPush");
+        }
+        private bool IsAnimationPlaying(string animationName)
+        {
+            // 현재 애니메이터 상태 정보 가져오기
+            AnimatorStateInfo currentState = _animator.GetCurrentAnimatorStateInfo(0);
+
+            // 애니메이션 이름과 상태가 일치하는지 확인
+            return currentState.IsName(animationName) && currentState.normalizedTime < 1.0f;
+        }
+        private void CheckCanPush() {
+                Vector3 forward = transform.TransformDirection(Vector3.forward);            
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0) {
+                Debug.DrawRay(new Vector3(transform.position.x,transform.position.y+0.9f,transform.position.z),forward,new Color(0,1,0));
+                if (Physics.Raycast(new Vector3(transform.position.x,transform.position.y+0.9f,transform.position.z),forward, rayDistance,pushableLayer) 
+                    && !isHold && Grounded && !(_animator.GetBool(_animIDCrouch))) {
+                    canPush=true;
+                }
+                else {
+                canPush=false;
+                }
+            }
+            else {
+                canPush=false;
+            }
+        }
+
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            if (canPush) PushRigidBodies(hit);
+            else StopPushAnimation();
+        }
+
+        private void PushRigidBodies(ControllerColliderHit hit)
+        {
+            // https://docs.unity3d.com/ScriptReference/CharacterController.OnControllerColliderHit.html\
+            // make sure we hit a non kinematic rigidbody
+            Rigidbody body = hit.collider.attachedRigidbody;
+            if (body == null || body.isKinematic) return;
+
+            // make sure we only push desired layer(s)
+            var bodyLayerMask = 1 << body.gameObject.layer;
+            if ((bodyLayerMask & pushLayers.value) == 0) return;
+
+            // We dont want to push objects below us
+            if (hit.moveDirection.y < -0.3f) return;
+
+            // Calculate push direction from move direction, horizontal motion only
+            Vector3 pushDir = new Vector3(hit.moveDirection.x, 0.0f, hit.moveDirection.z);
+            // Apply the push and take strength into account
+            body.AddForce(pushDir * strength, ForceMode.Impulse);
+            if (!isPushing)  // 이미 밀기 중인 경우 새로 시작하지 않음
+            {
+                StartCoroutine(WaitForPush());
+            }
+        }
+
+        private IEnumerator WaitForPush()
+        {
+            isPushing = true;
+            _animator.SetBool(_animIDIsPush, true);  // 밀기 애니메이션 시작
+
+            while (canPush && isPushing)  // 밀기가 지속되는 동안 루프
+            {
+                yield return null;  // 다음 프레임까지 대기
+            }
+
+            StopPushAnimation();  // 밀기가 멈추면 애니메이션 중단
+        }
+
+        private void StopPushAnimation()
+        {
+            if (isPushing)
+            {
+                _animator.SetBool(_animIDIsPush, false);  // 애니메이션 종료
+                isPushing = false;
+            }
         }
 
         private void GroundedCheck()
@@ -245,6 +339,10 @@ namespace StarterAssets
             if (_animator.GetBool(_animIDTwoHanded))
             {
                 targetSpeed=(_input.crouch ? CrouchSpeed : MoveSpeed)*TwoHandSpeed;
+            }
+            else if (_animator.GetBool(_animIDIsPush))
+            {
+                targetSpeed=PushSpeed;
             }
             else
             {
