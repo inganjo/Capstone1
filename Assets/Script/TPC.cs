@@ -30,7 +30,7 @@ namespace StarterAssets
         public float PushSpeed = 0.5f;
 
         [Tooltip("TwoHand Holding speed coefficient of the character in m/s")]
-        public float TwoHandSpeed = 0.5f;
+        public float TwoHandCoef = 0.5f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -106,6 +106,10 @@ namespace StarterAssets
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
 
+        //Aiming
+        private Transform cameraTransform;
+        float xAxis,zAxis;
+        float temp=0;
         //BasicRigidbody Push
         public LayerMask pushLayers;
         public bool canPush;
@@ -125,6 +129,10 @@ namespace StarterAssets
         private int _animIDOneHanded;
         private int _animIDIsPush;
         private int _animIDStopPush;
+        private int _animIDUseItem;
+        private int _animIDMoveX;
+        private int _animIDMoveZ;
+
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -173,7 +181,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+            cameraTransform=Camera.main.transform;
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -193,12 +201,14 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
+            MoveDirection();
             JumpAndGravity();
             GroundedCheck();
-            UseItem();
+            EquipItem();
             Crouch();
             Move();
             CheckCanPush();
+            UseItem();
         }
 
         private void LateUpdate()
@@ -218,7 +228,11 @@ namespace StarterAssets
             _animIDOneHanded=Animator.StringToHash("OneHanded");
             _animIDIsPush=Animator.StringToHash("IsPush");
             _animIDStopPush=Animator.StringToHash("StopPush");
+            _animIDUseItem=Animator.StringToHash("UseItem");
+            _animIDMoveX=Animator.StringToHash("MoveX");
+            _animIDMoveZ=Animator.StringToHash("MoveZ");
         }
+
         private bool IsAnimationPlaying(string animationName)
         {
             // 현재 애니메이터 상태 정보 가져오기
@@ -226,6 +240,18 @@ namespace StarterAssets
 
             // 애니메이션 이름과 상태가 일치하는지 확인
             return currentState.IsName(animationName) && currentState.normalizedTime < 1.0f;
+        }
+        private void MoveDirection()
+        {
+            xAxis = Input.GetAxis("Horizontal");
+            zAxis = Input.GetAxis("Vertical");
+            if (Mathf.Abs(xAxis) < 0.1f) xAxis = 0.0f;
+            if (Mathf.Abs(zAxis) < 0.1f) zAxis = 0.0f;
+
+            // 좌우 이동 값
+            _animator.SetFloat(_animIDMoveX, xAxis);
+            // 전후 이동 값
+            _animator.SetFloat(_animIDMoveZ, zAxis);
         }
         private void CheckCanPush() {
                 Vector3 forward = transform.TransformDirection(Vector3.forward);            
@@ -338,7 +364,7 @@ namespace StarterAssets
             // set target speed based on move speed, sprint speed and if sprint is pressed
             if (_animator.GetBool(_animIDTwoHanded))
             {
-                targetSpeed=(_input.crouch ? CrouchSpeed : MoveSpeed)*TwoHandSpeed;
+                targetSpeed=(_input.crouch ? CrouchSpeed : MoveSpeed)*TwoHandCoef;
             }
             else if (_animator.GetBool(_animIDIsPush))
             {
@@ -386,23 +412,39 @@ namespace StarterAssets
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_input.move != Vector2.zero)
-            {
-                _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
-                                  _mainCamera.transform.eulerAngles.y;
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
-                    RotationSmoothTime);
+            if (_input.fire) {
+                _animator.SetBool(_animIDUseItem,true);
+            }
+            else _animator.SetBool(_animIDUseItem,false);
 
-                // rotate to face input direction relative to camera position
-                transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+            if (_input.fire && _animator.GetBool(_animIDTwoHanded))
+            {
+                _targetRotation = _mainCamera.transform.eulerAngles.y;
+            }
+            else if (_input.move != Vector2.zero)  // 비조준 상태에서는 이동 방향 기준으로 회전
+            {
+                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
+                                  _mainCamera.transform.eulerAngles.y;
             }
 
-
+            // Smooth rotation 적용
+            float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
+            transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+            Vector3 moveDirection = transform.right * xAxis + transform.forward * zAxis;
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
-            _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
-                             new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            if (_input.fire && _animator.GetBool(_animIDTwoHanded))
+            {
+                _controller.Move(moveDirection.normalized * (_speed * Time.deltaTime) +
+                                new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            }
+            else if (_input.move != Vector2.zero)  // 움직임이 있을 때만 이동
+            {
+                _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
+                                new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            }
 
             // update animator if using character
             if (_hasAnimator)
@@ -433,7 +475,7 @@ namespace StarterAssets
             return -1;
         }
 
-        private void UseItem()
+        private void EquipItem()
         {
             int inputSlot=CheckInput();
             if (Grounded) {
@@ -512,11 +554,17 @@ namespace StarterAssets
                         Vector3 tmpTrans=_cameraRoot.transform.position;
                         _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.1f,tmpTrans.z);
                     }
+                    else if(_animator.GetBool(_animIDOneHanded)){
+                        _controller.center=new Vector3(0,0.6f,0);
+                        _controller.height=1.2f;
+                        Vector3 tmpTrans=_cameraRoot.transform.position;
+                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.2f,tmpTrans.z);
+                    }
                     else{
                         _controller.center=new Vector3(0,0.44f,0);
                         _controller.height=0.8f;
                         Vector3 tmpTrans=_cameraRoot.transform.position;
-                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+0.7f,tmpTrans.z);
+                        _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+0.9f,tmpTrans.z);
                     }
                     if (_hasAnimator)
                     {
@@ -537,6 +585,27 @@ namespace StarterAssets
             }
         }
         
+        private void UseItem() {
+            if (_input.fire && _animator.GetBool(_animIDTwoHanded))
+            {
+
+            }
+            if (_input.fire && _animator.GetBool(_animIDOneHanded))
+            {
+                if (temp<=1){
+                    temp+=Time.deltaTime;
+                }
+                _animator.SetLayerWeight(1,temp);
+            }
+            else
+            {
+                if (temp>=0){
+                    temp-=Time.deltaTime;
+                }
+                _animator.SetLayerWeight(1,temp);
+            }
+        }
+
         private void JumpAndGravity()
         {
             if (Grounded)

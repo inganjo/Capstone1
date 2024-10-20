@@ -17,6 +17,7 @@ namespace StarterAssets
 		public bool item2;
 		public bool item3;
 		public bool item4;
+		public bool fire;
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
@@ -38,6 +39,11 @@ namespace StarterAssets
 			}
 		}
 
+		public void OnFire(InputValue value)
+		{
+			fire=value.isPressed;
+		}
+
 		public void OnJump(InputValue value)
 		{
 			JumpInput(value.isPressed);
@@ -53,26 +59,6 @@ namespace StarterAssets
 			CrouchInput(value.isPressed);
 		}
 
-/*		public void OnItem1(InputValue value)
-		{
-			Item1Input(value.isPressed);
-		}
-
-		public void OnItem2(InputValue value)
-		{
-			Item2Input(value.isPressed);
-		}
-
-		public void OnItem3(InputValue value)
-		{
-			Item3Input(value.isPressed);
-		}
-
-		public void OnItem4(InputValue value)
-		{
-			Item4Input(value.isPressed);
-		}*/
-
 #endif
 
 
@@ -85,6 +71,11 @@ namespace StarterAssets
 		{
 			look = newLookDirection;
 		}
+		
+        public void FireInput(bool newFireState)
+        {
+            fire = newFireState;
+        }
 
 		public void JumpInput(bool newJumpState)
 		{
