@@ -478,7 +478,7 @@ namespace StarterAssets
         private void EquipItem()
         {
             int inputSlot=CheckInput();
-            if (Grounded) {
+ /*           if (Grounded) {
                 if (inputSlot >= 0 && inputSlot <= Inventory.instance.items.Count)
                 {
                     if (!isHold)
@@ -505,12 +505,12 @@ namespace StarterAssets
                 {
                     
                 }
-            }
+            }*/
         }
 
         private void ItemHold(int slotNumber)
         {
-            if (Inventory.instance.items.Count >= slotNumber)
+ /*           if (Inventory.instance.items.Count >= slotNumber)
             {
                 Item selectedItem = Inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
                 if (selectedItem != null)
@@ -533,7 +533,7 @@ namespace StarterAssets
             else
             {
                 Debug.Log("해당 슬롯에 아이템이 없습니다.");
-            }
+            }*/
         }
         private void ItemPutDown()
         {

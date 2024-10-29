@@ -145,7 +145,7 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
 
-            if (_cameraRoot == null)
+/*            if (_cameraRoot == null)
             {
                 _cameraRoot = transform.GetChild(0).gameObject;
             }
@@ -154,7 +154,7 @@ namespace StarterAssets
             {
                 inventory=GetComponent<Inventory>();
             }
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject);*/
         }
 
         private void Start()
@@ -305,7 +305,7 @@ namespace StarterAssets
             }
         }
 
-        private void ItemHold(int slotNumber)
+/*        private void ItemHold(int slotNumber)
         {
             if (inventory.instance.items.Count >= slotNumber)
             {
@@ -358,7 +358,7 @@ namespace StarterAssets
                     }
                 }
             }
-        }
+        }*/
         
         private void JumpAndGravity()
         {
