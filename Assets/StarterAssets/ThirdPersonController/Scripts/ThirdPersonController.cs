@@ -27,9 +27,6 @@ namespace StarterAssets
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
-        [Tooltip("Crouch speed of the character in m/s")]
-        public float CrouchSpeed = 1.0f;
-
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
@@ -96,9 +93,6 @@ namespace StarterAssets
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
 
-        // inventory
-        private Inventory inventory;
-
         // timeout deltatime
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
@@ -109,7 +103,6 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
-        private int _animIDCrouch;
 
         //photon
         public static GameObject LocalPlayerInstance;
@@ -121,7 +114,6 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
-        private GameObject _cameraRoot;
 
         private const float _threshold = 0.01f;
 
@@ -153,7 +145,7 @@ namespace StarterAssets
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
 
-            if (_cameraRoot == null)
+/*            if (_cameraRoot == null)
             {
                 _cameraRoot = transform.GetChild(0).gameObject;
             }
@@ -162,7 +154,7 @@ namespace StarterAssets
             {
                 inventory=GetComponent<Inventory>();
             }
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject);*/
         }
 
         private void Start()
@@ -190,11 +182,8 @@ namespace StarterAssets
             PhotonView photonView = GetComponent<PhotonView>();
             if(photonView.IsMine &&PhotonNetwork.IsConnected == true)
             _hasAnimator = TryGetComponent(out _animator);
-
             JumpAndGravity();
             GroundedCheck();
-            UseItem();
-            Crouch();
             Move();
         }
 
@@ -210,7 +199,6 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-            _animIDCrouch = Animator.StringToHash("Crouch");
         }
 
         private void GroundedCheck()
@@ -252,7 +240,8 @@ namespace StarterAssets
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.crouch ? CrouchSpeed : _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -315,25 +304,8 @@ namespace StarterAssets
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
         }
-        private void UseItem()
-        {
-            if (Grounded) {
-                if (_input.item1) {
-                    ItemHold(1);
-                }
-                if (_input.item2) {
-                    ItemHold(2);
-                }
-                if (_input.item3) {
-                    ItemHold(3);
-                }
-                if (_input.item4) {
-                    ItemHold(4);
-                }
-            }
-        }
 
-        private void ItemHold(int slotNumber)
+/*        private void ItemHold(int slotNumber)
         {
             if (inventory.instance.items.Count >= slotNumber)
             {
@@ -386,7 +358,7 @@ namespace StarterAssets
                     }
                 }
             }
-        }
+        }*/
         
         private void JumpAndGravity()
         {
