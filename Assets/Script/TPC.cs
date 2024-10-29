@@ -593,14 +593,14 @@ namespace StarterAssets
             if (_input.fire && _animator.GetBool(_animIDOneHanded))
             {
                 if (temp<=1){
-                    temp+=Time.deltaTime;
+                    temp+=Time.deltaTime*3;
                 }
                 _animator.SetLayerWeight(1,temp);
             }
             else
             {
                 if (temp>=0){
-                    temp-=Time.deltaTime;
+                    temp-=Time.deltaTime*3;
                 }
                 _animator.SetLayerWeight(1,temp);
             }
