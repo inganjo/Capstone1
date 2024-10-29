@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/school/DemoScene/all_objects.unity.meta
+guid: d8a9751f3d29e1f4ca44784b0cc9e913
+========
 guid: c8097533df763e749865df92e899b334
+>>>>>>>> main:Assets/Scene/Hyunsoo/alpha.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

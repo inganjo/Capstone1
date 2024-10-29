@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    #region Singleton
-    public static Inventory instance;
+
+    public Inventory instance;
     private void Awake()
     {
         instance = this;
     }
-    #endregion
+
     public delegate void ItemChange();
     public ItemChange itemChange;
     public int slotAmount = 4;

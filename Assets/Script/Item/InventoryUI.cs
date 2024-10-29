@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     Inventory inven;
+    Transform invenHolder;
     public Slot[] slots;
     public Transform slotHolder;
 
     private void Start()
     {
-        inven = Inventory.instance;
+        inven = GetComponentInParent<Inventory>().instance;
         slots = slotHolder.GetComponentsInChildren<Slot>();
         inven.itemChange += RedrawSlotUI;
     }
