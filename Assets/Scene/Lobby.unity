@@ -328,7 +328,7 @@ MonoBehaviour:
   CreateRoom: {fileID: 1305946654}
   roomListItem: {fileID: 5318470242368827749, guid: 76e3fe29f52a7b141b952a26f399f0df, type: 3}
   rtContent: {fileID: 245840292}
-  player: {fileID: 416470579583955154, guid: b13c4c9fd7a56a748bda618c585296f8, type: 3}
+  player: {fileID: 4203959919750534922, guid: 04ab1d3d1c3505641b78b3a4e85f623c, type: 3}
 --- !u!1 &245840291
 GameObject:
   m_ObjectHideFlags: 0
@@ -1444,7 +1444,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 781289137}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9995893
+  m_Size: 0.99985874
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

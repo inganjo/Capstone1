@@ -12,6 +12,7 @@ using static UnityEngine.EventSystems.PointerEventData;  // 유니티의 이벤�
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject player;
+    public GameObject UIinventory;
 
     private bool isSpawn;
     // Start is called before the first frame update
@@ -25,20 +26,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     void Start()
     {
-        
         Debug.Log("Start() start");
         // SpawnPlayer();
         
         
     }
-    // private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    // {
-    //     Debug.Log("OnSceneLoaded Active");
-    //     if(PhotonNetwork.InRoom)
-    //     {
-    //         SpawnPlayer();
-    //     }
-    // }
+
 
 
 
@@ -47,21 +40,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         // Debug.Log(PhotonNetwork.CountOfPlayers);
     }
-    void SpawnPlayer()
-    {
-        if(PhotonNetwork.LocalPlayer == null || !PhotonNetwork.InRoom)
-        {
-            Debug.LogWarning("Player not in the room");
-            return;
-        }
-        else{
-            if (ThirdPersonController.LocalPlayerInstance == null)
-            {
-                Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
-                PhotonNetwork.Instantiate(this.player.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
-            }
-           
-        }
+    void SpawnInventory(){
+        Debug.Log("SpawnInventory success");
+        Instantiate(UIinventory,new Vector3(0f, 0f, 0f), Quaternion.identity);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)

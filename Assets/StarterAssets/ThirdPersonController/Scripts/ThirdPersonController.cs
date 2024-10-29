@@ -335,9 +335,9 @@ namespace StarterAssets
 
         private void ItemHold(int slotNumber)
         {
-            if (Inventory.instance.items.Count >= slotNumber)
+            if (inventory.instance.items.Count >= slotNumber)
             {
-                Item selectedItem = Inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
+                Item selectedItem = inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
                 if (selectedItem != null)
                 {
                     if (selectedItem.itemType == ItemType.OneHand)
