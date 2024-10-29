@@ -1,6 +1,12 @@
 ﻿ using UnityEngine;
-#if ENABLE_INPUT_SYSTEM 
+using Photon.Pun.Demo.PunBasics;
+using Unity.VisualScripting;
+
+
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using Photon.Pun;               // Photon Unity Networking 기능을 사용하기 위해 필요
+using Photon.Realtime; 
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -98,6 +104,9 @@ namespace StarterAssets
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
 
+        //photon
+        public static GameObject LocalPlayerInstance;
+
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -125,11 +134,27 @@ namespace StarterAssets
 
         private void Awake()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if(photonView.IsMine)
+            {
+                PlayerManager.LocalPlayerInstance = this.gameObject;
+            }
             // get a reference to our main camera
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+
+            if (_cameraRoot == null)
+            {
+                _cameraRoot = transform.GetChild(0).gameObject;
+            }
+
+            if (inventory == null)
+            {
+                inventory=GetComponent<Inventory>();
+            }
+            DontDestroyOnLoad(this.gameObject);
         }
 
         private void Start()
@@ -154,6 +179,8 @@ namespace StarterAssets
 
         private void Update()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if(photonView.IsMine &&PhotonNetwork.IsConnected == true)
             _hasAnimator = TryGetComponent(out _animator);
             JumpAndGravity();
             GroundedCheck();
@@ -278,6 +305,61 @@ namespace StarterAssets
             }
         }
 
+        private void ItemHold(int slotNumber)
+        {
+            if (inventory.instance.items.Count >= slotNumber)
+            {
+                Item selectedItem = inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
+                if (selectedItem != null)
+                {
+                    if (selectedItem.itemType == ItemType.OneHand)
+                    {
+                        //한손 애니메이션
+                    }
+                    else if (selectedItem.itemType == ItemType.TwoHand)
+                    {
+                        //두손 애니메이션
+                    }
+                }
+                else
+                {
+                    Debug.Log("해당 슬롯에 아이템이 없습니다.");
+                }
+            }
+            else
+            {
+                Debug.Log("해당 슬롯에 아이템이 없습니다.");
+            }
+        }
+        private void Crouch()
+        {
+            if (Grounded)
+            {
+                if (_input.crouch)
+                {
+                    _controller.center=new Vector3(0,0.44f,0);
+                    _controller.height=0.8f;
+                    Vector3 tmpTrans=_cameraRoot.transform.position;
+                    _cameraRoot.transform.position=new Vector3(tmpTrans.x,0.7f,tmpTrans.z);
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDCrouch, true);
+                    }
+                }
+                else
+                {
+                    _controller.center=new Vector3(0,0.99f,0);
+                    _controller.height=1.8f;
+                    Vector3 tmpTrans=_cameraRoot.transform.position;
+                    _cameraRoot.transform.position=new Vector3(tmpTrans.x,1.5f,tmpTrans.z);
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDCrouch, false);
+                    }
+                }
+            }
+        }
+        
         private void JumpAndGravity()
         {
             if (Grounded)
