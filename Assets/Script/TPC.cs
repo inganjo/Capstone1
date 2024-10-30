@@ -1,5 +1,7 @@
  using UnityEngine;
  using System.Collections;
+ using Photon.Pun; 
+ using Photon.Pun.Demo.PunBasics;
 #if ENABLE_INPUT_SYSTEM 
 using UnityEngine.InputSystem;
 #endif
@@ -133,6 +135,8 @@ namespace StarterAssets
         private int _animIDMoveX;
         private int _animIDMoveZ;
 
+
+
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
 #endif
@@ -161,6 +165,11 @@ namespace StarterAssets
 
         private void Awake()
         {
+            // PhotonView photonView = GetComponent<PhotonView>();
+            // if(photonView.IsMine)
+            // {
+            //     PlayerManager.LocalPlayerInstance = this.gameObject;
+            // }
             // get a reference to our main camera
             if (_mainCamera == null)
             {
@@ -185,6 +194,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            Debug.Log(_input);
 #if ENABLE_INPUT_SYSTEM 
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -200,17 +210,29 @@ namespace StarterAssets
 
         private void Update()
         {
-            _hasAnimator = TryGetComponent(out _animator);
-            MoveDirection();
-            JumpAndGravity();
-            GroundedCheck();
-            EquipItem();
-            Crouch();
-            Move();
-            CheckCanPush();
-            UseItem();
+            if(PhotonNetwork.IsConnected == true){
+                PhotonView photonView = GetComponent<PhotonView>();
+                if(photonView.IsMine)
+                {
+                    // Debug.Log("PhotonNetwork working");
+                    PlayerAction();
+                }
+            }
+            else{
+                PlayerAction();
+            }
         }
-
+        private void PlayerAction(){
+                _hasAnimator = TryGetComponent(out _animator);
+                MoveDirection();
+                JumpAndGravity();
+                GroundedCheck();
+                EquipItem();
+                Crouch();
+                Move();
+                CheckCanPush();
+                UseItem();
+        }
         private void LateUpdate()
         {
             CameraRotation();
@@ -478,8 +500,8 @@ namespace StarterAssets
         private void EquipItem()
         {
             int inputSlot=CheckInput();
- /*           if (Grounded) {
-                if (inputSlot >= 0 && inputSlot <= Inventory.instance.items.Count)
+            if (Grounded) {
+                if (inputSlot >= 0 && inputSlot <= inventory.instance.items.Count)
                 {
                     if (!isHold)
                     {
@@ -505,14 +527,14 @@ namespace StarterAssets
                 {
                     
                 }
-            }*/
+            }
         }
 
         private void ItemHold(int slotNumber)
         {
- /*           if (Inventory.instance.items.Count >= slotNumber)
+           if (inventory.instance.items.Count >= slotNumber)
             {
-                Item selectedItem = Inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
+                Item selectedItem = inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
                 if (selectedItem != null)
                 {
                     if (selectedItem.itemType == ItemType.OneHand)
@@ -533,7 +555,7 @@ namespace StarterAssets
             else
             {
                 Debug.Log("해당 슬롯에 아이템이 없습니다.");
-            }*/
+            }
         }
         private void ItemPutDown()
         {
