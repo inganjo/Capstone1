@@ -2210,7 +2210,7 @@ MonoBehaviour:
   LockCameraPosition: 0
   pushLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 64
   canPush: 0
   rayDistance: 0.5
   pushableLayer:
