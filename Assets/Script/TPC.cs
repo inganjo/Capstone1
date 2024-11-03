@@ -93,6 +93,9 @@ namespace StarterAssets
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
 
+        //Item
+        public GameObject item_L;
+        public GameObject item_R;
         // player
         private float _speed;
         private float _animationBlend;
@@ -112,6 +115,7 @@ namespace StarterAssets
         private Transform cameraTransform;
         float xAxis,zAxis;
         float temp=0;
+
         //BasicRigidbody Push
         public LayerMask pushLayers;
         public bool canPush;
@@ -540,10 +544,12 @@ namespace StarterAssets
                     if (selectedItem.itemType == ItemType.OneHand)
                     {
                         _animator.SetBool(_animIDOneHanded,true);
+                        item_L.SetActive(true);
                     }
                     else if (selectedItem.itemType == ItemType.TwoHand)
                     {
                         _animator.SetBool(_animIDTwoHanded,true);
+                        item_R.SetActive(true);
                     }
                     isHold=true;
                 }
@@ -561,6 +567,8 @@ namespace StarterAssets
         {
             if (_animator.GetBool(_animIDOneHanded)) _animator.SetBool(_animIDOneHanded,false);
             if (_animator.GetBool(_animIDTwoHanded)) _animator.SetBool(_animIDTwoHanded,false);
+            item_L.SetActive(false);
+            item_R.SetActive(false);
             isHold=false;
         }
 
