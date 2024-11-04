@@ -1,0 +1,1 @@
+#error This version of Zibra Smoke and Fire doesn't support VR

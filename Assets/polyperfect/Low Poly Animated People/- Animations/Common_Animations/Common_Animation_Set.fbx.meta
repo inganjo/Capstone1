@@ -688,95 +688,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Standing_Idle' has import animation warnings
-      that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Standing_Singing'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Standing_Mobile_Calling' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Standing_Texting' has import animation warnings
-      that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Standing_Talking'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Standing_Shouting' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Walking_Mobile_Texting' has import animation
-      warnings that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\nClip 'Walking_Mobile_Talking'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Walking-Holding_Box' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Holding_Box-Walking' has import animation
-      warnings that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\nClip 'Walking_Talking'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Walking_Drinking' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Sitting_Floor_Idle' has import animation warnings
-      that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Idle-Sitting_Bench'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Sitting_Bench_Idle' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Sitting_Sofa_Idle' has import animation warnings
-      that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Sitting-Changing_Channels'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Sitting-Mobile' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Sitting_Mobile_Texting' has import animation
-      warnings that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\nClip 'Mobile_Texting-Sitting'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Blow_Kiss' has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Make_Ok_Gesture' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Thumbs_Up_Gesture' has import animation warnings
-      that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Vomiting' has import
-      animation warnings that might lower retargeting quality:\n\t'Jaw_M' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Cleaning_Sweeping' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Cleaning_Table' has import animation warnings
-      that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Idle_Laying_Down_Resting'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Laying_Down_Sleeping' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Laying_Mobile_Texting' has import animation
-      warnings that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\nClip 'Laying_Mobile_Texting-Laying_Sleeping'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      has translation animation that will be discarded.\n\t'Jaw_M' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\nClip 'Sitting_Eating_Bowl'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      has translation animation that will be discarded.\n\t'Jaw_M' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\nClip 'Sitting_Eating_Plate'
-      has import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Sitting_Drinking' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' has translation animation that will be discarded.\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Sitting_Using_Computer' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\nClip 'Sitting_Talking' has import animation warnings
-      that might lower retargeting quality:\n\t'Jaw_M' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\nClip 'Sitting-Idle' has
-      import animation warnings that might lower retargeting quality:\n\t'Jaw_M'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'Standing_Dancing' has import animation warnings that might lower retargeting
-      quality:\n\t'Jaw_M' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -1092,11 +1004,11 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
-      loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlend: 1
+      loopBlendOrientation: 1
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
@@ -2303,6 +2215,7 @@ ModelImporter:
     secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0

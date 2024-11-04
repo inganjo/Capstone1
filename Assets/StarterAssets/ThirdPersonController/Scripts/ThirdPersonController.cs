@@ -1,6 +1,12 @@
 ﻿ using UnityEngine;
-#if ENABLE_INPUT_SYSTEM 
+using Photon.Pun.Demo.PunBasics;
+using Unity.VisualScripting;
+
+
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using Photon.Pun;               // Photon Unity Networking 기능을 사용하기 위해 필요
+using Photon.Realtime; 
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -20,9 +26,6 @@ namespace StarterAssets
 
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
-
-        [Tooltip("Crouch speed of the character in m/s")]
-        public float CrouchSpeed = 1.0f;
 
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
@@ -100,7 +103,9 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
-        private int _animIDCrouch;
+
+        //photon
+        public static GameObject LocalPlayerInstance;
 
 #if ENABLE_INPUT_SYSTEM 
         private PlayerInput _playerInput;
@@ -109,7 +114,6 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
-        private GameObject _cameraRoot;
 
         private const float _threshold = 0.01f;
 
@@ -130,16 +134,27 @@ namespace StarterAssets
 
         private void Awake()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if(photonView.IsMine)
+            {
+                PlayerManager.LocalPlayerInstance = this.gameObject;
+            }
             // get a reference to our main camera
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
 
-            if (_cameraRoot == null)
+/*            if (_cameraRoot == null)
             {
                 _cameraRoot = transform.GetChild(0).gameObject;
             }
+
+            if (inventory == null)
+            {
+                inventory=GetComponent<Inventory>();
+            }
+            DontDestroyOnLoad(this.gameObject);*/
         }
 
         private void Start()
@@ -164,11 +179,11 @@ namespace StarterAssets
 
         private void Update()
         {
+            PhotonView photonView = GetComponent<PhotonView>();
+            if(photonView.IsMine &&PhotonNetwork.IsConnected == true)
             _hasAnimator = TryGetComponent(out _animator);
-
             JumpAndGravity();
             GroundedCheck();
-            Crouch();
             Move();
         }
 
@@ -184,7 +199,6 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-            _animIDCrouch = Animator.StringToHash("Crouch");
         }
 
         private void GroundedCheck()
@@ -226,7 +240,8 @@ namespace StarterAssets
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.crouch ? CrouchSpeed : _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
@@ -290,6 +305,32 @@ namespace StarterAssets
             }
         }
 
+/*        private void ItemHold(int slotNumber)
+        {
+            if (inventory.instance.items.Count >= slotNumber)
+            {
+                Item selectedItem = inventory.instance.items[slotNumber - 1]; // Inventory의 items 리스트 사용
+                if (selectedItem != null)
+                {
+                    if (selectedItem.itemType == ItemType.OneHand)
+                    {
+                        //한손 애니메이션
+                    }
+                    else if (selectedItem.itemType == ItemType.TwoHand)
+                    {
+                        //두손 애니메이션
+                    }
+                }
+                else
+                {
+                    Debug.Log("해당 슬롯에 아이템이 없습니다.");
+                }
+            }
+            else
+            {
+                Debug.Log("해당 슬롯에 아이템이 없습니다.");
+            }
+        }
         private void Crouch()
         {
             if (Grounded)
@@ -317,7 +358,7 @@ namespace StarterAssets
                     }
                 }
             }
-        }
+        }*/
         
         private void JumpAndGravity()
         {
