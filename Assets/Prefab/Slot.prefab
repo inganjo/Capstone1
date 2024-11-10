@@ -97,6 +97,7 @@ MonoBehaviour:
     itemType: 0
     itemName: 
     itemImage: {fileID: 0}
+    itemPrefab: {fileID: 0}
     efts: []
   icon: {fileID: 6638280308636051344}
   textImage: {fileID: 6473146507031430931}
