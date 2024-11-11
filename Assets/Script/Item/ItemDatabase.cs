@@ -16,7 +16,7 @@ public class ItemDatabase : MonoBehaviour
     #region Dictionary
     public Dictionary<string, string> itemInfo = new Dictionary<string, string>()
     {
-        
+        {"소화기","불을 끌 수 있다"}
     };
     #endregion
 
