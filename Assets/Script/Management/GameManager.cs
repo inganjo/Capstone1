@@ -14,6 +14,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject player;
     public GameObject UIinventory;
 
+
+    //ping stat
+    private List<int> pingValues = new List<int>();
+    private float timeElapsed = 0f;
+    private float pingInterval = 1f;
+
     private bool isSpawn;
     // Start is called before the first frame update
 
@@ -38,7 +44,26 @@ public class GameManager : MonoBehaviourPunCallbacks
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log(PhotonNetwork.CountOfPlayers);
+
+        timeElapsed += Time.deltaTime;
+
+        // 주기적으로 핑을 측정하고 저장
+        if (timeElapsed >= pingInterval)
+        {
+            int currentPing = PhotonNetwork.GetPing();
+            pingValues.Add(currentPing);
+            Debug.Log("현재 핑: " + currentPing + " ms");
+
+            timeElapsed = 0f;
+        }
+
+
+        // 네트워크 통계 정보 활성화
+        PhotonNetwork.NetworkStatisticsEnabled = true;
+
+// 네트워크 통계 정보 확인
+        string stats = PhotonNetwork.NetworkStatisticsToString();
+        Debug.Log("네트워크 통계: " + stats);
     }
     void SpawnInventory(){
         Debug.Log("SpawnInventory success");
@@ -58,7 +83,30 @@ public class GameManager : MonoBehaviourPunCallbacks
     void OnDestroy()
 {
     Debug.Log("GameManager destroyed!");// 씬 전환 전 리스너 해제
+    OnGUI();
 }
+
+//네트워크 측정 정보
+    public float GetAveragePing()
+    {
+        if (pingValues.Count == 0)
+            return 0f;
+
+        int sum = 0;
+        foreach (int ping in pingValues)
+        {
+            sum += ping;
+        }
+
+        return (float)sum / pingValues.Count;
+    }
+    void OnGUI()
+    {
+
+            float averagePing = GetAveragePing();
+            Debug.Log("평균 핑: " + averagePing + " ms");
+    
+    }
 }
 //  void Start()
 //     {

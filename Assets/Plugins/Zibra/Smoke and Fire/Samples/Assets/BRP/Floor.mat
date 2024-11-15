@@ -8,24 +8,25 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Floor
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _ENVIRONMENTREFLECTIONS_OFF
-  - _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
-  m_InvalidKeywords:
   - _GLOSSYREFLECTIONS_OFF
+  - _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
   - RayTracingPrepass
   - MOTIONVECTORS
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -219,7 +220,7 @@ Material:
     - _EnableFogOnTransparent: 1
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
-    - _EnvironmentReflections: 0
+    - _EnvironmentReflections: 1
     - _GlossMapScale: 0.5
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -260,7 +261,7 @@ Material:
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
-    - _Smoothness: 0
+    - _Smoothness: 0.5
     - _SmoothnessRemapMax: 0.6155453
     - _SmoothnessRemapMin: 0.4387798
     - _SmoothnessTextureChannel: 1
@@ -306,7 +307,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.9292453, g: 0.98686486, b: 1, a: 1}
+    - _BaseColor: {r: 0.9292453, g: 0.9868649, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.9292453, g: 0.98686486, b: 1, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
