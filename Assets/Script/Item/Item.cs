@@ -5,7 +5,8 @@ using UnityEngine;
 public enum ItemType
 {
     OneHand,
-    TwoHand
+    TwoHand,
+    NonHand
 }
 [System.Serializable]
 public class Item

@@ -2194,6 +2194,7 @@ MonoBehaviour:
   LockCameraPosition: 0
   item_L: {fileID: 0}
   item_R: {fileID: 0}
+  extEffect: {fileID: 0}
   pushLayers:
     serializedVersion: 2
     m_Bits: 64

@@ -7,9 +7,10 @@ using UnityEngine.UI;
 public class InventoryUI : MonoBehaviour
 {
     Inventory inven;
-    Transform invenHolder;
     public Slot[] slots;
     public Transform slotHolder;
+
+    private int currentSlot=-1;
 
     private void Start()
     {
@@ -29,6 +30,36 @@ public class InventoryUI : MonoBehaviour
         {
             slots[i].item = inven.items[i];
             slots[i].UpdateSlotUI();
+        }
+        UpdateSlotHighlight();
+    }
+    
+    public void SetCurrentSlot(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < slots.Length)
+        {
+            currentSlot = slotIndex;
+            UpdateSlotHighlight();
+        }
+        else if (slotIndex < 0)
+        {
+            slots[currentSlot].ResetBorder();
+            currentSlot=-1;
+        }
+    }
+
+    private void UpdateSlotHighlight()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (i == currentSlot)
+            {
+                slots[i].HighlightSlot();
+            }
+            else
+            {
+                slots[i].ResetBorder();
+            }
         }
     }
 }

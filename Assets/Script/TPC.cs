@@ -96,6 +96,7 @@ namespace StarterAssets
         //Item
         public GameObject item_L;
         public GameObject item_R;
+        public ParticleSystem extEffect;
         // player
         private float _speed;
         private float _animationBlend;
@@ -512,12 +513,14 @@ namespace StarterAssets
                         // 아이템 들기 동작
                         ItemHold(inputSlot);
                         equipNum = inputSlot; // 현재 들고 있는 아이템 슬롯 번호 갱신
+                        FindObjectOfType<InventoryUI>().SetCurrentSlot(inputSlot - 1);
                     }
                     else if (isHold && inputSlot == equipNum)
                     {
                         // 아이템 내려놓기
                         ItemPutDown();
                         equipNum=-2;
+                        FindObjectOfType<InventoryUI>().SetCurrentSlot(-1); // 선택 해제
                     }
                     else
                     {
@@ -525,6 +528,7 @@ namespace StarterAssets
                         ItemPutDown();
                         ItemHold(inputSlot);
                         equipNum = inputSlot;
+                        FindObjectOfType<InventoryUI>().SetCurrentSlot(inputSlot - 1); // InventoryUI에 슬롯 번호 전달
                     }
                 }
                 else
@@ -616,26 +620,51 @@ namespace StarterAssets
         }
         
         private void UseItem() {
-            if (_input.fire && _animator.GetBool(_animIDTwoHanded))
+            if (_animator.GetBool(_animIDTwoHanded))
             {
-
-            }
-            if (_input.fire && _animator.GetBool(_animIDOneHanded))
-            {
-                if (temp<=1){
-                    temp+=Time.deltaTime*3;
+                if (_input.fire)
+                {
+                    ActivateParticle();
                 }
-                _animator.SetLayerWeight(1,temp);
-            }
-            else
-            {
-                if (temp>=0){
-                    temp-=Time.deltaTime*3;
+                else
+                {
+                    DeactivateParticle();
                 }
-                _animator.SetLayerWeight(1,temp);
+            }
+            if (_animator.GetBool(_animIDOneHanded))
+            {
+                if(_input.fire)
+                {
+                    if (temp<=1){
+                        temp+=Time.deltaTime*3;
+                    }
+                    _animator.SetLayerWeight(1,temp);
+                }
+                else
+                {
+                    if (temp>=0){
+                        temp-=Time.deltaTime*3;
+                    }
+                    _animator.SetLayerWeight(1,temp);
+                }
             }
         }
 
+        void ActivateParticle()
+        {
+            if (!extEffect.isPlaying)
+            {
+                extEffect.Play();
+            }
+        }
+
+        void DeactivateParticle()
+        {
+            if (extEffect.isPlaying)
+            {
+                extEffect.Stop();
+            }
+        }
         private void JumpAndGravity()
         {
             if (Grounded)
