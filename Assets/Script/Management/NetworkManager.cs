@@ -166,7 +166,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
     {
         base.OnJoinedRoom();
         Debug.Log("OnJoinedRoom() success");
-        PhotonNetwork.LoadLevel("GameRoom");
+        PhotonNetwork.LoadLevel("GH3Floor");
     }
     public override void OnJoinRoomFailed(short returnCode, string message)
     {

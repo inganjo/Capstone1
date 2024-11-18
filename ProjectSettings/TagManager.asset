@@ -7,6 +7,9 @@ TagManager:
   - CinemachineTarget
   - Bullet
   - Item
+  - Fire1
+  - Fire2
+  - Fire3
   layers:
   - Default
   - TransparentFX
