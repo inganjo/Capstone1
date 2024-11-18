@@ -11,17 +11,45 @@ public class Slot : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     public Image icon;
     public Image textImage;
     public Text text;
+    public Image border;
 
     public void UpdateSlotUI()
     {
-        icon.sprite = item.itemImage;
-        icon.gameObject.SetActive(true);
+        if (item != null)
+        {
+            icon.sprite = item.itemImage;
+            icon.gameObject.SetActive(true);
+        }
+        else
+        {
+            RemoveSlot();
+        }
     }
     public void RemoveSlot()
     {
         item = null;
         icon.gameObject.SetActive(false);
+        ResetBorder();
     }
+
+    public void HighlightSlot()
+    {
+        if (border != null)
+        {
+            border.color=Color.white;
+            border.enabled=true;
+        }
+    }
+
+    public void ResetBorder()
+    {
+        if (border!= null)
+        {
+            border.color=Color.clear;
+            border.enabled=false;
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (item.itemImage != null)
