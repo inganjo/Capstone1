@@ -472,6 +472,11 @@ namespace StarterAssets
                 _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                                 new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
             }
+            else
+            {
+                // 이동 입력이 없는 경우에도 중력은 적용
+                _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            }
 
             // update animator if using character
             if (_hasAnimator)
@@ -583,20 +588,20 @@ namespace StarterAssets
                 if (_input.crouch)
                 {
                     if(_animator.GetBool(_animIDTwoHanded)){
-                        _controller.center=new Vector3(0,0.6f,0);
                         _controller.height=1.2f;
+                        _controller.center=new Vector3(0,0.6f,0);
                         Vector3 tmpTrans=_cameraRoot.transform.position;
                         _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.1f,tmpTrans.z);
                     }
                     else if(_animator.GetBool(_animIDOneHanded)){
-                        _controller.center=new Vector3(0,0.6f,0);
                         _controller.height=1.2f;
+                        _controller.center=new Vector3(0,0.6f,0);
                         Vector3 tmpTrans=_cameraRoot.transform.position;
                         _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.2f,tmpTrans.z);
                     }
                     else{
-                        _controller.center=new Vector3(0,0.44f,0);
                         _controller.height=0.8f;
+                        _controller.center=new Vector3(0,0.44f,0);
                         Vector3 tmpTrans=_cameraRoot.transform.position;
                         _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+0.9f,tmpTrans.z);
                     }
@@ -607,8 +612,8 @@ namespace StarterAssets
                 }
                 else
                 {
-                    _controller.center=new Vector3(0,0.99f,0);
                     _controller.height=1.8f;
+                    _controller.center=new Vector3(0,0.99f,0);
                     Vector3 tmpTrans=_cameraRoot.transform.position;
                     _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.5f,tmpTrans.z);
                     if (_hasAnimator)
