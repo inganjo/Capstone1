@@ -96,6 +96,7 @@ namespace StarterAssets
         //Item
         public GameObject item_L;
         public GameObject item_R;
+        public ParticleSystem extEffect;
         // player
         private float _speed;
         private float _animationBlend;
@@ -471,6 +472,11 @@ namespace StarterAssets
                 _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                                 new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
             }
+            else
+            {
+                // 이동 입력이 없는 경우에도 중력은 적용
+                _controller.Move(new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            }
 
             // update animator if using character
             if (_hasAnimator)
@@ -512,12 +518,14 @@ namespace StarterAssets
                         // 아이템 들기 동작
                         ItemHold(inputSlot);
                         equipNum = inputSlot; // 현재 들고 있는 아이템 슬롯 번호 갱신
+                        FindObjectOfType<InventoryUI>().SetCurrentSlot(inputSlot - 1);
                     }
                     else if (isHold && inputSlot == equipNum)
                     {
                         // 아이템 내려놓기
                         ItemPutDown();
                         equipNum=-2;
+                        FindObjectOfType<InventoryUI>().SetCurrentSlot(-1); // 선택 해제
                     }
                     else
                     {
@@ -525,6 +533,7 @@ namespace StarterAssets
                         ItemPutDown();
                         ItemHold(inputSlot);
                         equipNum = inputSlot;
+                        FindObjectOfType<InventoryUI>().SetCurrentSlot(inputSlot - 1); // InventoryUI에 슬롯 번호 전달
                     }
                 }
                 else
@@ -579,20 +588,20 @@ namespace StarterAssets
                 if (_input.crouch)
                 {
                     if(_animator.GetBool(_animIDTwoHanded)){
-                        _controller.center=new Vector3(0,0.6f,0);
                         _controller.height=1.2f;
+                        _controller.center=new Vector3(0,0.6f,0);
                         Vector3 tmpTrans=_cameraRoot.transform.position;
                         _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.1f,tmpTrans.z);
                     }
                     else if(_animator.GetBool(_animIDOneHanded)){
-                        _controller.center=new Vector3(0,0.6f,0);
                         _controller.height=1.2f;
+                        _controller.center=new Vector3(0,0.6f,0);
                         Vector3 tmpTrans=_cameraRoot.transform.position;
                         _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.2f,tmpTrans.z);
                     }
                     else{
-                        _controller.center=new Vector3(0,0.44f,0);
                         _controller.height=0.8f;
+                        _controller.center=new Vector3(0,0.44f,0);
                         Vector3 tmpTrans=_cameraRoot.transform.position;
                         _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+0.9f,tmpTrans.z);
                     }
@@ -603,8 +612,8 @@ namespace StarterAssets
                 }
                 else
                 {
-                    _controller.center=new Vector3(0,0.99f,0);
                     _controller.height=1.8f;
+                    _controller.center=new Vector3(0,0.99f,0);
                     Vector3 tmpTrans=_cameraRoot.transform.position;
                     _cameraRoot.transform.position=new Vector3(tmpTrans.x,transform.position.y+1.5f,tmpTrans.z);
                     if (_hasAnimator)
@@ -616,26 +625,51 @@ namespace StarterAssets
         }
         
         private void UseItem() {
-            if (_input.fire && _animator.GetBool(_animIDTwoHanded))
+            if (_animator.GetBool(_animIDTwoHanded))
             {
-
-            }
-            if (_input.fire && _animator.GetBool(_animIDOneHanded))
-            {
-                if (temp<=1){
-                    temp+=Time.deltaTime*3;
+                if (_input.fire)
+                {
+                    ActivateParticle();
                 }
-                _animator.SetLayerWeight(1,temp);
-            }
-            else
-            {
-                if (temp>=0){
-                    temp-=Time.deltaTime*3;
+                else
+                {
+                    DeactivateParticle();
                 }
-                _animator.SetLayerWeight(1,temp);
+            }
+            if (_animator.GetBool(_animIDOneHanded))
+            {
+                if(_input.fire)
+                {
+                    if (temp<=1){
+                        temp+=Time.deltaTime*3;
+                    }
+                    _animator.SetLayerWeight(1,temp);
+                }
+                else
+                {
+                    if (temp>=0){
+                        temp-=Time.deltaTime*3;
+                    }
+                    _animator.SetLayerWeight(1,temp);
+                }
             }
         }
 
+        void ActivateParticle()
+        {
+            if (!extEffect.isPlaying)
+            {
+                extEffect.Play();
+            }
+        }
+
+        void DeactivateParticle()
+        {
+            if (extEffect.isPlaying)
+            {
+                extEffect.Stop();
+            }
+        }
         private void JumpAndGravity()
         {
             if (Grounded)

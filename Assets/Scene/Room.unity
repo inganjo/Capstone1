@@ -1307,6 +1307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 416470579583955154, guid: b13c4c9fd7a56a748bda618c585296f8, type: 3}
+  UIinventory: {fileID: 0}
 --- !u!1 &1602916988
 GameObject:
   m_ObjectHideFlags: 0
