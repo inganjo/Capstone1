@@ -1,38 +1,44 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SceneChanger : MonoBehaviour
 {
     public string sceneName;  // 전환할 씬의 이름
     public Vector3 targetPosition;  // 씬 전환 후 이동할 좌표
+    private bool isTransitioning = false;  // 중복 전환 방지 플래그
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))  // 태그가 "Player"인 오브젝트가 트리거에 들어왔을 때
+        if (other.CompareTag("Player") && !isTransitioning)  // "Player" 태그와 중복 전환 방지 확인
         {
-            // 씬 전환 후 로드될 씬에서 플레이어의 이동 좌표를 기억하도록 이벤트 등록
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            isTransitioning = true;  // 플래그 설정
+            SceneManager.sceneLoaded += OnSceneLoaded;  // 씬 로드 이벤트 등록
 
-            // 씬 전환
-            FindObjectOfType<SceneFader>().FadeToScene(sceneName);
+            SceneFader sceneFader = FindObjectOfType<SceneFader>();
+            if (sceneFader != null)
+            {
+                sceneFader.FadeToScene(sceneName);  // 페이드 아웃 후 씬 전환
+            }
+            else
+            {
+                Debug.LogWarning("SceneFader component not found. Directly loading the scene.");
+                SceneManager.LoadScene(sceneName);  // SceneFader가 없을 경우 직접 씬 로드
+            }
         }
     }
 
-    // 씬이 로드된 후 호출될 메소드
+    // 씬이 로드된 후 호출될 메서드
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 현재 로드된 씬이 목표 씬인지 확인
-        if (scene.name == sceneName)
+        if (scene.name == sceneName)  // 현재 로드된 씬이 목표 씬인지 확인
         {
-            // 플레이어를 찾아서 위치를 이동
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
             {
-                player.transform.position = targetPosition;
+                player.transform.position = targetPosition;  // 플레이어 위치 이동
             }
-
-            // 씬 로드 이벤트 해제
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded -= OnSceneLoaded;  // 이벤트 등록 해제
         }
     }
 }

@@ -1,8 +1,14 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Models.meta
 guid: 7bdb4f4769f0cd0498ff3ddc4075d711
 folderAsset: yes
 DefaultImporter:
+========
+guid: 288488d71d0063c4b82cc5636b5e5c57
+NativeFormatImporter:
+>>>>>>>> main:Assets/Scene/Gyuhyeon/New Material.mat.meta
   externalObjects: {}
+  mainObjectFileID: 2100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
