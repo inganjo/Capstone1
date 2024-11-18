@@ -35,8 +35,7 @@ public class SceneFader : MonoBehaviour
         // 씬을 전환
         SceneManager.LoadScene(sceneName);
 
-        // 새로운 씬에서 페이드 인 (화면이 서서히 밝아짐)
-        yield return StartCoroutine(Fade(0f));
+        fadeImage.GetComponent<Image>().color = new Color(0, 0, 0, 0);
 
         isFading = false;
     }
