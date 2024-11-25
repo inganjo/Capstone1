@@ -1698,6 +1698,7 @@ GameObject:
   - component: {fileID: 7273630372603230279}
   - component: {fileID: 8167513152234162453}
   - component: {fileID: 2635489935569268782}
+  - component: {fileID: 1294551787534124748}
   m_Layer: 3
   m_Name: Player 1
   m_TagString: Player
@@ -2114,6 +2115,22 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   strength: 1.1
+--- !u!114 &1294551787534124748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3719342341355765095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02b9438f5fdb64e4fbdff3278fc86128, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tombstonePrefab: {fileID: 168578, guid: 74ca3f36c2cac4d4ebc12bde9ffc4b69, type: 3}
+  maxHealth: 100
+  maxHealHP: 50
+  currentHealth: 0
 --- !u!1 &3918824033767456048
 GameObject:
   m_ObjectHideFlags: 0
