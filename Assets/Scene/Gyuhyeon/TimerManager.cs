@@ -72,6 +72,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
         }
         UpdateTimerUIReference();
         FindPlayer();
+        FindPlayer();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -153,6 +154,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
     }
 
     public void TriggerGameOver()
+    public void TriggerGameOver()
     {
         gameOverTriggered = true;
 
@@ -160,6 +162,13 @@ public class TimerManager : MonoBehaviourPunCallbacks
         {
             gameOverPanel.GetComponent<Image>().color = new Color(0, 0, 0, 1);
             gameOverPanel.SetActive(true);
+            Canvas canvas = gameOverPanel.GetComponentInParent<Canvas>(); // 부모 Canvas 가져오기
+            if (canvas != null)
+            {
+                canvas.sortingOrder = 999; // 높은 우선순위로 설정
+            }
+
+
             Canvas canvas = gameOverPanel.GetComponentInParent<Canvas>(); // 부모 Canvas 가져오기
             if (canvas != null)
             {
@@ -182,6 +191,38 @@ public class TimerManager : MonoBehaviourPunCallbacks
         if (gameOverText != null)
         {
             gameOverText.text = "Game Over!";
+        }
+
+        DisablePlayerControl();
+    }
+
+    public void TriggerGameClear()
+    {
+        gameOverTriggered = true;
+        gameOverText.text = "Game Clear!";
+        gameOverText.color = Color.black;
+        Canvas canvas = gameOverPanel.GetComponentInParent<Canvas>(); // 부모 Canvas 가져오기
+        if (canvas != null)
+        {
+            canvas.sortingOrder = 999; // 높은 우선순위로 설정
+        }
+
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.GetComponent<Image>().color = new Color(255, 255, 255, 1);
+            gameOverPanel.SetActive(true);
+
+            if (canvasGroup != null)
+            {
+                canvasGroup.alpha = 0f;
+                StartCoroutine(FadeInGameOverPanel());
+            }
+        }
+
+        if (timerText != null)
+        {
+            timerText.gameObject.SetActive(false);
         }
 
         DisablePlayerControl();
