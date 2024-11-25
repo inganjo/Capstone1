@@ -18,11 +18,14 @@ public class TimerManager : MonoBehaviourPunCallbacks
     public Text gameOverText;
     private CanvasGroup canvasGroup;
 
+<<<<<<< HEAD
     private PhotonView photonView;
 
     private float startTime;
     
     // 플레이어 참조를 위한 변수 추가
+=======
+>>>>>>> d0c2505c27d746cc12d8dd1495920ff8b806321d
     private GameObject player;
 
     void Awake()
@@ -81,11 +84,16 @@ public class TimerManager : MonoBehaviourPunCallbacks
     {
         UpdateTimerUIReference();
         InitializeGameOverUI();
+<<<<<<< HEAD
         FindPlayer(); // 씬 로드시 플레이어 다시 찾기
         if(PhotonNetwork.IsConnected ==true && PhotonNetwork.IsMasterClient)
         {
             photonView.RPC("SyncStartTime",RpcTarget.All,startTime);
         }
+=======
+        FindPlayer();
+
+>>>>>>> d0c2505c27d746cc12d8dd1495920ff8b806321d
         if (gameOverTriggered)
         {
             TriggerGameOver();
@@ -262,6 +270,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
             canvasGroup.alpha = 1f;
         }
     }
+<<<<<<< HEAD
     #region RPC
     [PunRPC]
     void SyncStartTime(float masterStartTime)
@@ -274,4 +283,6 @@ public class TimerManager : MonoBehaviourPunCallbacks
         TriggerGameOver();
     }
     #endregion
+=======
+>>>>>>> d0c2505c27d746cc12d8dd1495920ff8b806321d
 }
