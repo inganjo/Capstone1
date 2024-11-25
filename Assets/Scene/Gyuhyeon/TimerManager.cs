@@ -18,14 +18,11 @@ public class TimerManager : MonoBehaviourPunCallbacks
     public Text gameOverText;
     private CanvasGroup canvasGroup;
 
-<<<<<<< HEAD
     private PhotonView photonView;
 
     private float startTime;
     
     // 플레이어 참조를 위한 변수 추가
-=======
->>>>>>> d0c2505c27d746cc12d8dd1495920ff8b806321d
     private GameObject player;
 
     void Awake()
@@ -85,16 +82,11 @@ public class TimerManager : MonoBehaviourPunCallbacks
     {
         UpdateTimerUIReference();
         InitializeGameOverUI();
-<<<<<<< HEAD
         FindPlayer(); // 씬 로드시 플레이어 다시 찾기
         if(PhotonNetwork.IsConnected ==true && PhotonNetwork.IsMasterClient)
         {
             photonView.RPC("SyncStartTime",RpcTarget.All,startTime);
         }
-=======
-        FindPlayer();
-
->>>>>>> d0c2505c27d746cc12d8dd1495920ff8b806321d
         if (gameOverTriggered)
         {
             TriggerGameOver();
@@ -154,7 +146,6 @@ public class TimerManager : MonoBehaviourPunCallbacks
     }
 
     public void TriggerGameOver()
-    public void TriggerGameOver()
     {
         gameOverTriggered = true;
 
@@ -168,12 +159,6 @@ public class TimerManager : MonoBehaviourPunCallbacks
                 canvas.sortingOrder = 999; // 높은 우선순위로 설정
             }
 
-
-            Canvas canvas = gameOverPanel.GetComponentInParent<Canvas>(); // 부모 Canvas 가져오기
-            if (canvas != null)
-            {
-                canvas.sortingOrder = 999; // 높은 우선순위로 설정
-            }
 
 
             if (canvasGroup != null)
@@ -228,37 +213,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
         DisablePlayerControl();
     }
 
-    public void TriggerGameClear()
-    {
-        gameOverTriggered = true;
-        gameOverText.text = "Game Clear!";
-        gameOverText.color = Color.black;
-        Canvas canvas = gameOverPanel.GetComponentInParent<Canvas>(); // 부모 Canvas 가져오기
-        if (canvas != null)
-        {
-            canvas.sortingOrder = 999; // 높은 우선순위로 설정
-        }
 
-
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.GetComponent<Image>().color = new Color(255, 255, 255, 1);
-            gameOverPanel.SetActive(true);
-
-            if (canvasGroup != null)
-            {
-                canvasGroup.alpha = 0f;
-                StartCoroutine(FadeInGameOverPanel());
-            }
-        }
-
-        if (timerText != null)
-        {
-            timerText.gameObject.SetActive(false);
-        }
-
-        DisablePlayerControl();
-    }
 
     void DisablePlayerControl()
     {
@@ -311,7 +266,6 @@ public class TimerManager : MonoBehaviourPunCallbacks
             canvasGroup.alpha = 1f;
         }
     }
-<<<<<<< HEAD
     #region RPC
     [PunRPC]
     void SyncStartTime(float masterStartTime)
@@ -324,6 +278,4 @@ public class TimerManager : MonoBehaviourPunCallbacks
         TriggerGameOver();
     }
     #endregion
-=======
->>>>>>> d0c2505c27d746cc12d8dd1495920ff8b806321d
 }
