@@ -4253,6 +4253,7 @@ GameObject:
   - component: {fileID: 302761078}
   - component: {fileID: 302761079}
   - component: {fileID: 302761081}
+  - component: {fileID: 302761082}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter (2)
   m_TagString: Fire2
@@ -4326,6 +4327,20 @@ MonoBehaviour:
   inititalZ: 5
   spawnpoint: {fileID: 0}
   scaleSpeed: {x: 0.1, y: 0, z: 0.1}
+  scaleSpeedDown: {x: -0.3, y: 0, z: -0.3}
+--- !u!65 &302761082
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302761077}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &306540740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15610,6 +15625,7 @@ GameObject:
   - component: {fileID: 989200050}
   - component: {fileID: 989200051}
   - component: {fileID: 989200053}
+  - component: {fileID: 989200054}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter (2)
   m_TagString: Fire2
@@ -15683,6 +15699,20 @@ MonoBehaviour:
   inititalZ: 10
   spawnpoint: {fileID: 18648742}
   scaleSpeed: {x: 0.1, y: 0, z: 0.1}
+  scaleSpeedDown: {x: -0.3, y: 0, z: -0.3}
+--- !u!65 &989200054
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989200049}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &992338913
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20694,6 +20724,7 @@ GameObject:
   - component: {fileID: 1344934433}
   - component: {fileID: 1344934431}
   - component: {fileID: 1344934432}
+  - component: {fileID: 1344934435}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter (3)
   m_TagString: Fire3
@@ -20737,6 +20768,7 @@ MonoBehaviour:
   inititalZ: 0
   spawnpoint: {fileID: 91265620}
   scaleSpeed: {x: 0.1, y: 0, z: 0.1}
+  scaleSpeedDown: {x: -0.3, y: 0, z: -0.3}
 --- !u!114 &1344934433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20767,6 +20799,19 @@ Transform:
   m_Father: {fileID: 2100681622}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1344934435
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1344934430}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1345486569
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22141,6 +22186,7 @@ GameObject:
   - component: {fileID: 1458336299}
   - component: {fileID: 1458336298}
   - component: {fileID: 1458336297}
+  - component: {fileID: 1458336300}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter (2)
   m_TagString: Fire2
@@ -22181,6 +22227,7 @@ MonoBehaviour:
   inititalZ: 0
   spawnpoint: {fileID: 1114856902}
   scaleSpeed: {x: 0.1, y: 0, z: 0.1}
+  scaleSpeedDown: {x: -0.3, y: 0, z: -0.3}
 --- !u!114 &1458336298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22214,6 +22261,19 @@ MonoBehaviour:
   InvertSDF: 0
   SurfaceDistance: 0
   ChosenSDFType: 1
+--- !u!65 &1458336300
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458336295}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1466226873
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24396,6 +24456,7 @@ GameObject:
   - component: {fileID: 1611715638}
   - component: {fileID: 1611715639}
   - component: {fileID: 1611715641}
+  - component: {fileID: 1611715642}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter (1)
   m_TagString: Fire1
@@ -24469,6 +24530,20 @@ MonoBehaviour:
   inititalZ: 9.5
   spawnpoint: {fileID: 0}
   scaleSpeed: {x: 0.1, y: 0, z: 0.1}
+  scaleSpeedDown: {x: -0.3, y: 0, z: -0.3}
+--- !u!65 &1611715642
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1611715637}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1613054481
 GameObject:
   m_ObjectHideFlags: 0
@@ -25576,6 +25651,7 @@ GameObject:
   - component: {fileID: 1696196729}
   - component: {fileID: 1696196727}
   - component: {fileID: 1696196728}
+  - component: {fileID: 1696196731}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter(2)
   m_TagString: Fire2
@@ -25619,6 +25695,7 @@ MonoBehaviour:
   inititalZ: 9.5
   spawnpoint: {fileID: 1940565609}
   scaleSpeed: {x: 0.1, y: 0, z: 0.1}
+  scaleSpeedDown: {x: -0.3, y: 0, z: -0.3}
 --- !u!114 &1696196729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25649,6 +25726,19 @@ Transform:
   m_Father: {fileID: 754222519}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1696196731
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696196726}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1701954554
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26285,6 +26375,7 @@ GameObject:
   - component: {fileID: 1755429887}
   - component: {fileID: 1755429885}
   - component: {fileID: 1755429886}
+  - component: {fileID: 1755429888}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter
   m_TagString: Untagged
@@ -26340,6 +26431,19 @@ Transform:
   m_Father: {fileID: 559450194}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1755429888
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1755429884}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1758855643
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27115,6 +27219,7 @@ GameObject:
   - component: {fileID: 1802255418}
   - component: {fileID: 1802255416}
   - component: {fileID: 1802255417}
+  - component: {fileID: 1802255420}
   m_Layer: 0
   m_Name: Zibra Smoke & Fire Emitter (3)
   m_TagString: Fire3
@@ -27158,6 +27263,7 @@ MonoBehaviour:
   inititalZ: 17
   spawnpoint: {fileID: 922449999}
   scaleSpeed: {x: 0.1, y: 0, z: 0.1}
+  scaleSpeedDown: {x: -0.3, y: 0, z: -0.3}
 --- !u!114 &1802255418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27188,6 +27294,19 @@ Transform:
   m_Father: {fileID: 1326049166}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1802255420
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802255415}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1810113648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27999,6 +28118,102 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3904719364644053574, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061416082391828830, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061416082391828830, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061416082391828830, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061416082391828830, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061416082391828830, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7061416082391828830, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048294999967, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048294999967, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048294999967, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048294999967, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048294999967, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048294999967, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048622179991, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048622179991, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048622179991, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048622179991, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048622179991, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985048622179991, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985049254335016, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985049254335016, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985049254335016, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985049254335016, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985049254335016, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8136985049254335016, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}

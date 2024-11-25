@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7810019553780631708}
   - component: {fileID: 236884388538510057}
   - component: {fileID: 2502018895247504006}
+  - component: {fileID: 5329418589824268312}
   m_Layer: 0
   m_Name: Fire extinguisher
   m_TagString: Item
@@ -1126,6 +1127,28 @@ MonoBehaviour:
     - {x: 0.39205977, y: 0.77777404, z: -0.49128062}
     - {x: 0.28744283, y: 0.9271781, z: 0.24024443}
     - {x: 0.27158532, y: 0.9498261, z: -0.1551506}
+--- !u!114 &5329418589824268312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2063305477512717680}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2063305477512717682
 GameObject:
   m_ObjectHideFlags: 0

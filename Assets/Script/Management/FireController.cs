@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
-public class FireController : MonoBehaviour
+public class FireController : MonoBehaviour, IFamable
 {
     //최대 확장 크기
     [SerializeField]
@@ -15,6 +16,8 @@ public class FireController : MonoBehaviour
     [SerializeField]
     public Transform spawnpoint;
     public Vector3 scaleSpeed = new Vector3(0.1f, 0, 0.1f);
+    public Vector3 scaleSpeedDown = new Vector3(-0.3f, 0,-0.3f);
+    private bool isScaleDown = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,14 +32,35 @@ public class FireController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(this.transform.localScale.z >= maxZ){
-            scaleSpeed.z = 0f;
+        if(!isScaleDown){
+            if(this.transform.localScale.z >= maxZ){
+                scaleSpeed.z = 0f;
+
+            }
+            if(this.transform.localScale.x >= maxX)
+            {
+                scaleSpeed.x = 0f;
+            }
+            
+            this.transform.localScale += scaleSpeed * Time.deltaTime; 
+        }
+        else
+        {
+            Debug.Log("fire small");
+            transform.localScale += scaleSpeedDown * Time.deltaTime;
+
+            isScaleDown = false;
 
         }
-        if(this.transform.localScale.x >= maxX)
+        if(transform.localScale.z < 0 || transform.localScale.x < 0)
         {
-            scaleSpeed.x = 0f;
+            Debug.Log("불이 완저히 소화되었다.");
+            gameObject.SetActive(false);
         }
-        this.transform.localScale += scaleSpeed * Time.deltaTime; 
+    }
+    public void OnHitByExtinguisher(){
+
+        isScaleDown = true;
+        
     }
 }
