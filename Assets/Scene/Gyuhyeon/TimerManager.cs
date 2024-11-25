@@ -68,7 +68,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
             }
         }
         UpdateTimerUIReference();
-        FindPlayer(); // 플레이어 찾기
+        FindPlayer();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -92,7 +92,6 @@ public class TimerManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // 플레이어 찾기 함수 추가
     void FindPlayer()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -145,26 +144,25 @@ public class TimerManager : MonoBehaviourPunCallbacks
         }
     }
 
-void TriggerGameOver()
+    public void TriggerGameOver()
     {
         gameOverTriggered = true;
 
-        // UI 처리
         if (gameOverPanel != null)
         {
-            // 패널의 Image 컴포넌트 색상 설정 (검정색)
             gameOverPanel.GetComponent<Image>().color = new Color(0, 0, 0, 1);
-            
-            // 패널 활성화 및 페이드 효과
             gameOverPanel.SetActive(true);
+            Canvas canvas = gameOverPanel.GetComponentInParent<Canvas>(); // 부모 Canvas 가져오기
+            if (canvas != null)
+            {
+                canvas.sortingOrder = 999; // 높은 우선순위로 설정
+            }
+
+
             if (canvasGroup != null)
             {
                 canvasGroup.alpha = 0f;
                 StartCoroutine(FadeInGameOverPanel());
-            }
-            else
-            {
-                Debug.LogError("CanvasGroup이 없습니다!");
             }
         }
 
@@ -178,16 +176,45 @@ void TriggerGameOver()
             gameOverText.text = "Game Over!";
         }
 
-        // 플레이어 제어 비활성화
         DisablePlayerControl();
     }
 
-    // 플레이어 제어 비활성화 함수 추가
+    public void TriggerGameClear()
+    {
+        gameOverTriggered = true;
+        gameOverText.text = "Game Clear!";
+        gameOverText.color = Color.black;
+        Canvas canvas = gameOverPanel.GetComponentInParent<Canvas>(); // 부모 Canvas 가져오기
+        if (canvas != null)
+        {
+            canvas.sortingOrder = 999; // 높은 우선순위로 설정
+        }
+
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.GetComponent<Image>().color = new Color(255, 255, 255, 1);
+            gameOverPanel.SetActive(true);
+
+            if (canvasGroup != null)
+            {
+                canvasGroup.alpha = 0f;
+                StartCoroutine(FadeInGameOverPanel());
+            }
+        }
+
+        if (timerText != null)
+        {
+            timerText.gameObject.SetActive(false);
+        }
+
+        DisablePlayerControl();
+    }
+
     void DisablePlayerControl()
     {
         if (player != null)
         {
-            // Rigidbody 처리
             Rigidbody rb = player.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -195,7 +222,6 @@ void TriggerGameOver()
                 rb.constraints = RigidbodyConstraints.FreezeAll;
             }
 
-            // Rigidbody2D 처리
             Rigidbody2D rb2d = player.GetComponent<Rigidbody2D>();
             if (rb2d != null)
             {
@@ -203,12 +229,9 @@ void TriggerGameOver()
                 rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
             }
 
-            // 플레이어 스크립트 비활성화
-            // PlayerController라는 이름의 스크립트를 사용하는 경우
             MonoBehaviour[] scripts = player.GetComponents<MonoBehaviour>();
             foreach (MonoBehaviour script in scripts)
             {
-                // PlayerController 또는 이와 유사한 이름의 스크립트를 찾아 비활성화
                 if (script.GetType().Name.Contains("Player") || 
                     script.GetType().Name.Contains("Movement") || 
                     script.GetType().Name.Contains("Control"))
