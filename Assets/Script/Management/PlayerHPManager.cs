@@ -10,6 +10,9 @@ public class PlayerHPManager : MonoBehaviourPun
     public float maxHealth = 100f; // 최대 체력
     public float maxHealHP = 50f;
     public float currentHealth;   // 현재 체력
+    private float timer;          // 데미지 받은 후 경과 시간
+    public float healDelay = 5f;  // 회복 시작까지 대기 시간
+    public float healRate = 2f;   // 초당 회복량
 
     private void Start()
     {
@@ -19,8 +22,17 @@ public class PlayerHPManager : MonoBehaviourPun
 
     private void Update()
     {
-        if (currentHealth<=0)
+        if (currentHealth<=0) {
             Die();
+        }
+
+        if (currentHealth < maxHealHP && timer >= healDelay)
+        {
+            HealOverTime();
+        }
+
+        // 타이머 증가
+        timer += Time.deltaTime;
     }
     // 체력을 감소시키는 함수
     [PunRPC]
@@ -88,12 +100,12 @@ public class PlayerHPManager : MonoBehaviourPun
 
     // 체력을 회복시키는 함수
     [PunRPC]
-    public void Heal(int amount)
+    public void HealOverTime()
     {
         if (photonView.IsMine) // 본인의 객체인지 확인
         {
-            currentHealth += amount;
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealHP); 
+            currentHealth += healRate * Time.deltaTime;
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealHP); // 체력 범위 제한
         }
     }
 }
