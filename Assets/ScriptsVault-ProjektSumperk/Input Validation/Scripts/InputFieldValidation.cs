@@ -51,7 +51,9 @@ namespace ProjektSumperk
             // Validate alphabet characters and spaces
             if (!System.Text.RegularExpressions.Regex.IsMatch(name, @"^[a-zA-Z ]+$"))
             {
-                nameErrorText.text = "Invalid name format. Please enter alphabet characters and spaces only.";
+                //nameErrorText.text = "Invalid name format. Please enter alphabet characters and spaces only.";
+                nameErrorText.text = string.Empty; // Clear error text if valid
+
             }
             else
             {
