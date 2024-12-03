@@ -6,9 +6,13 @@ using Photon.Pun;
 public class PlayerHPManager : MonoBehaviourPun
 {
     [SerializeField] private GameObject tombstonePrefab;
+    [SerializeField] private GameObject geometry;
+    [SerializeField] private GameObject main;
+    private bool isDead=false;
+
     [Header("Player Stats")]
     public float maxHealth = 100f; // 최대 체력
-    public float maxHealHP = 50f;
+    public float maxHealHP = 50f;  // 자동 회복 상한
     public float currentHealth;   // 현재 체력
     private float timer;          // 데미지 받은 후 경과 시간
     public float healDelay = 5f;  // 회복 시작까지 대기 시간
@@ -16,7 +20,6 @@ public class PlayerHPManager : MonoBehaviourPun
 
     private void Start()
     {
-        // 체력을 최대 체력으로 초기화
         currentHealth = maxHealth;
     }
 
@@ -25,20 +28,17 @@ public class PlayerHPManager : MonoBehaviourPun
         if (currentHealth<=0) {
             Die();
         }
-
         if (currentHealth < maxHealHP && timer >= healDelay)
         {
             HealOverTime();
         }
-
-        // 타이머 증가
         timer += Time.deltaTime;
     }
-    // 체력을 감소시키는 함수
+
     [PunRPC]
     public void TakeDamage(float damage)
     {
-        if (photonView.IsMine) // 본인의 객체인지 확인
+        if (photonView.IsMine) 
         {
             currentHealth -= damage;
 
@@ -52,12 +52,30 @@ public class PlayerHPManager : MonoBehaviourPun
     // 사망 처리 함수
     public void Die()
     {
+        if (isDead) return;
+
+        isDead=true;
+
+        if (main != null)
+        {
+            main.SetActive(false); 
+        }
+        if (geometry != null)
+        {
+            geometry.SetActive(false);
+        }
+
         if (tombstonePrefab != null)
         {
             Quaternion currentRotation = transform.rotation;
             Quaternion tombstoneRotation = Quaternion.Euler(-90, currentRotation.eulerAngles.y, currentRotation.eulerAngles.z);
-
-            // 비석 생성
+            Collider capsuleCollider = GetComponent<CapsuleCollider>();
+            CharacterController cc= GetComponent<CharacterController>();
+            if (capsuleCollider != null)
+            {
+                cc.enabled=false;
+                capsuleCollider.enabled = false;
+            }
             GameObject tombstone = null;
             if (PhotonNetwork.IsConnected)
             {
@@ -74,38 +92,38 @@ public class PlayerHPManager : MonoBehaviourPun
                 Rigidbody rb = tombstone.GetComponent<Rigidbody>();
                 if (rb != null)
                 {
-                    Vector3 forceDirection = Vector3.up * 5f; // Z축 방향으로 힘 (10f는 힘의 크기)
+                    Vector3 forceDirection = Vector3.up * 5f;
                     rb.AddForce(forceDirection, ForceMode.Impulse);
                 }
             }
+            StartCoroutine(DestroyAfterDelay(3f));
         }
-        else
-        {
-            Debug.LogWarning("[HPManager] 비석 프리팹이 설정되지 않았습니다.");
-        }
+    }
 
-        // 네트워크 객체 파괴
+    private IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         if (PhotonNetwork.IsConnected)
         {
             if (photonView.IsMine)
             {
-                PhotonNetwork.Destroy(gameObject);
+                PhotonNetwork.Destroy(gameObject); // 네트워크 객체 제거
             }
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject); // 로컬 객체 제거
         }
     }
 
-    // 체력을 회복시키는 함수
     [PunRPC]
     public void HealOverTime()
     {
-        if (photonView.IsMine) // 본인의 객체인지 확인
+        if (photonView.IsMine)
         {
             currentHealth += healRate * Time.deltaTime;
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealHP); // 체력 범위 제한
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealHP); 
         }
     }
 }
