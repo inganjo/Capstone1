@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/UniversalRenderPipelineGlobalSettings.asset.meta
 guid: 96fa196f3b575b8499345e9fd31f8ec2
 NativeFormatImporter:
+========
+guid: f20d1d7c93b91414eb19adc4609f254d
+PrefabImporter:
+>>>>>>>> Stashed changes:Assets/Scene/Gyuhyeon/Player Fix.prefab.meta
   externalObjects: {}
   mainObjectFileID: 11400000
   userData: 
