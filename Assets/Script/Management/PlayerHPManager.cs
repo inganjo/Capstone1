@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 public class PlayerHPManager : MonoBehaviourPun
 {
@@ -17,6 +18,14 @@ public class PlayerHPManager : MonoBehaviourPun
     private float timer;          // 데미지 받은 후 경과 시간
     public float healDelay = 5f;  // 회복 시작까지 대기 시간
     public float healRate = 2f;   // 초당 회복량
+
+    public float Firedamage = 20.0f;
+
+    public float SmokeDamage = 5.0f;
+
+    
+
+    
 
     private void Start()
     {
@@ -35,12 +44,24 @@ public class PlayerHPManager : MonoBehaviourPun
         timer += Time.deltaTime;
     }
 
+    public void OnTriggerStay(Collider other){
+        if(other.gameObject.tag == "Fire1" || other.gameObject.tag == "Fire2" || other.gameObject.tag == "Fire3")
+        {
+            TakeDamage(Firedamage);
+        }
+        else if(other.gameObject.tag =="smoke")
+        {
+            TakeDamage(SmokeDamage);
+        }
+        
+    }
+    // 체력을 감소시키는 함수
     [PunRPC]
     public void TakeDamage(float damage)
     {
         if (photonView.IsMine) 
         {
-            currentHealth -= damage;
+            currentHealth -= damage * Time.deltaTime;
 
             if (currentHealth <= 0)
             {
@@ -79,6 +100,7 @@ public class PlayerHPManager : MonoBehaviourPun
             GameObject tombstone = null;
             if (PhotonNetwork.IsConnected)
             {
+                Debug.Log("비석 생성");
                 tombstone = PhotonNetwork.Instantiate(tombstonePrefab.name, transform.position, tombstoneRotation);
             }
             else
@@ -108,7 +130,8 @@ public class PlayerHPManager : MonoBehaviourPun
         {
             if (photonView.IsMine)
             {
-                PhotonNetwork.Destroy(gameObject); // 네트워크 객체 제거
+                PhotonNetwork.Destroy(gameObject);
+                TimerManager.instance.TriggerGameOver();
             }
         }
         else

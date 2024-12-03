@@ -21,11 +21,13 @@ public class FireController : MonoBehaviour, IFamable
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 currentPosition = transform.position;
+        Vector3 currentPosition = spawnpoint.position;
         currentPosition.y = 0f;
-        transform.position = currentPosition;
+        spawnpoint.position = currentPosition;
+        
 
         this.transform.position = spawnpoint.position;
+        Debug.Log(transform.position);
         this.transform.localScale += new Vector3(inititalX,0,inititalZ); 
     }
 

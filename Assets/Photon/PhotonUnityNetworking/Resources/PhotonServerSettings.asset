@@ -43,6 +43,8 @@ MonoBehaviour:
   - SyncStartTime
   - Heal
   - TakeDamage
+  - SyncremainingTime
+  - GameStart
   - HealOverTime
   DisableAutoOpenWizard: 1
   ShowSettings: 1

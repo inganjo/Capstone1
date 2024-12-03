@@ -115,7 +115,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
       PhotonNetwork.CreateRoom(RoomName.text,options);
    }
 
-    void SpawnPlayer()
+    void SpawnPlayer(GameObject other)
     {
         if(PhotonNetwork.LocalPlayer == null || !PhotonNetwork.InRoom)
         {
@@ -126,7 +126,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
             if (ThirdPersonController.LocalPlayerInstance == null)
             {
                 Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
-                PhotonNetwork.Instantiate(this.player.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+                PhotonNetwork.Instantiate(this.player.name,other.transform.position, Quaternion.identity, 0);
             }
            
         }
@@ -137,7 +137,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks // Photon의 MonoBehavio
         Debug.Log("OnSceneLoaded Active");
         if(PhotonNetwork.InRoom)
         {
-            SpawnPlayer();
+            GameObject spawnpoint = GameObject.FindGameObjectWithTag("SPAWNPOINT");
+            SpawnPlayer(spawnpoint);
         }
     }
    void OnDestroy()

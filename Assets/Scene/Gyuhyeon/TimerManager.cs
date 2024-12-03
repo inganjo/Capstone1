@@ -4,40 +4,60 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEditor;
 
 public class TimerManager : MonoBehaviourPunCallbacks
 {
-    private static TimerManager instance;
+    public static TimerManager instance;
 
     public float timeLimit = 180f;
     private float remainingTime;
     private Text timerText;
     private bool gameOverTriggered = false;
+    
 
     public GameObject gameOverPanel;
     public Text gameOverText;
     private CanvasGroup canvasGroup;
 
     private PhotonView photonView;
+    private PhotonView myphotonView;
 
     private float startTime;
     
     // 플레이어 참조를 위한 변수 추가
     private GameObject player;
 
+    private GameObject spawnpoint;
+
     void Awake()
     {
+        // photonView = GetComponent<PhotonView>();
+        // Debug.Log($"PhotonView 생성됨: {photonView.ViewID}, {gameObject.name}");
+        // if (FindObjectsOfType<TimerManager>().Length > 1)
+        // {
+        //     Debug.LogWarning("중복된 TimerManager 객체 제거");
+        //     Destroy(gameObject);
+        //     return;
+        // }
         if (instance == null)
         {
             instance = this;
-            photonView = GetComponent<PhotonView>();
+
             DontDestroyOnLoad(this.gameObject);
             InitializeGameOverUI();
         }
-        else
+        else if(instance != null || instance !=this)
         {
             Destroy(gameObject);
+            return;
         }
+        // photonView = GetComponent<PhotonView>();
+        // if (photonView != null && photonView.ViewID == 0)
+        // {
+        //     Debug.Log($"TimerManager PhotonView 동적 ID 할당: {gameObject.name}");
+        //     photonView.ViewID = PhotonNetwork.AllocateViewID(false);
+        // }
     }
 
     private void InitializeGameOverUI()
@@ -57,19 +77,19 @@ public class TimerManager : MonoBehaviourPunCallbacks
 
     void Start()
     {
-        if(PhotonNetwork.IsConnected == false){
+        photonView = GetComponent<PhotonView>();
+        Debug.Log("TimeManager 시작됨");
+        
             remainingTime = timeLimit;
-        }
-        else{
-            if(PhotonNetwork.IsMasterClient)
-            {
-                startTime = Time.time;
-                photonView.RPC("SyncStartTime", RpcTarget.All,startTime);
-            }
-        }
+
+
+        
         UpdateTimerUIReference();
-        FindPlayer();
-        FindPlayer();
+        if(PhotonNetwork.IsConnected == false || PhotonNetwork.IsMasterClient){
+                FindPlayer();
+                FindPlayer();
+        }
+        MoveSpawnPoint();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -83,43 +103,68 @@ public class TimerManager : MonoBehaviourPunCallbacks
         UpdateTimerUIReference();
         InitializeGameOverUI();
         FindPlayer(); // 씬 로드시 플레이어 다시 찾기
-        if(PhotonNetwork.IsConnected ==true && PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("SyncStartTime",RpcTarget.All,startTime);
-        }
+
         if (gameOverTriggered)
         {
-            TriggerGameOver();
+            if(myphotonView.IsMine){
+                TriggerGameOver();
+            }
         }
     }
 
     void FindPlayer()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log(player);
+        Debug.Log("FindPlayer 작동");
+        if(PhotonNetwork.IsConnected == false){
+            Debug.Log("오프라인 view 정상 작동");
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
+        else{
+            foreach(GameObject player1 in GameObject.FindGameObjectsWithTag("Player"))
+            {
+                Debug.Log("player1" + player1);
+                PhotonView view = player1.GetComponent<PhotonView>();
+                if(view != null && view.IsMine)
+                {
+                    Debug.Log("view 정상 작동");
+                    player = player1;
+                    myphotonView = view;
+                    break;
+                }
+            }
+        }
+
         if (player == null)
         {
             Debug.LogWarning("Player를 찾을 수 없습니다.");
         }
     }
 
+    void MoveSpawnPoint(){
+        spawnpoint = GameObject.FindGameObjectWithTag("SPAWNPOINT");
+        Debug.Log("TimeManager:" +spawnpoint);
+        Debug.Log("TimeManager:" +player);
+        player.transform.position = spawnpoint.transform.position;
+    }
+
     void Update()
     {
+        Debug.Log("남은 시간" + remainingTime);
         if (remainingTime > 0 && !gameOverTriggered)
         {
-            remainingTime = timeLimit - (Time.time - startTime);
+            // Debug.Log("Update if문 작동중");
+            // if(PhotonNetwork.IsMasterClient){
+                remainingTime = timeLimit - (Time.time - startTime);
+                // myphotonView.RPC("SyncremainingTime",RpcTarget.All,remainingTime);
+            // }
+
             UpdateTimerUI();
 
             if (remainingTime <= 0)
             {
-                if(PhotonNetwork.IsConnected == false)
-                {
+
                     TriggerGameOver();
-                }
-                else if(PhotonNetwork.IsMasterClient)
-                {
-                    photonView.RPC("RPC_TriggerGameOver", RpcTarget.All);
-                }
+        
             }
         }
     }
@@ -128,7 +173,8 @@ public class TimerManager : MonoBehaviourPunCallbacks
     {
         if (timerText != null)
         {
-            Debug.Log("작동됨");
+            // Debug.Log("UpdateTimerUI 시작됨");
+
             int minutes = Mathf.FloorToInt(remainingTime / 60);
             int seconds = Mathf.FloorToInt(remainingTime % 60);
             timerText.text = $"{minutes:00}:{seconds:00}";
@@ -268,14 +314,34 @@ public class TimerManager : MonoBehaviourPunCallbacks
     }
     #region RPC
     [PunRPC]
-    void SyncStartTime(float masterStartTime)
+    void SyncStartTime(float timelimit)
     {
-       startTime = masterStartTime;
+       Debug.Log("SyncStartTime 시작됨");
+       remainingTime = timelimit;
     }
     [PunRPC]
     void RPC_TriggerGameOver()
     {
         TriggerGameOver();
+    }
+    [PunRPC]
+    void SyncremainingTime(float currenttime)
+    {
+        remainingTime = currenttime;
+    }
+    #endregion
+
+
+    #region PUN
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+
+        base.OnPlayerEnteredRoom(newPlayer);
+        Debug.Log(newPlayer.NickName + "님이 입장하셨습니다.");
+
+        FindPlayer();
+
+
     }
     #endregion
 }
