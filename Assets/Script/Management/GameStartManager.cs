@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +9,9 @@ public class GameStartManager : MonoBehaviourPunCallbacks
 {
 
     public TimerManager Timemanager;
-    public GameObject startbutton;
+    public GameObject startText;
     private PhotonView photonView;
-    public Button myButton;
+    public TMP_Text StartAlarm;
     public GameObject Timer;
 
     private ElevatorGameover EG;
@@ -22,7 +23,7 @@ public class GameStartManager : MonoBehaviourPunCallbacks
         EG.gameObject.SetActive(false);
         Timer.SetActive(false);
         if(PhotonNetwork.IsConnected == false){
-            startbutton.SetActive(false);
+            startText.SetActive(false);
             Timemanager.enabled = true;
             EG.gameObject.SetActive(true);
             Timer.SetActive(true);
@@ -30,15 +31,10 @@ public class GameStartManager : MonoBehaviourPunCallbacks
         else{
             if(PhotonNetwork.IsMasterClient == false)
             {
-                startbutton.SetActive(false);
+                startText.SetActive(false);
             
             }
-             myButton.onClick.AddListener(() => {
-                photonView.RPC("GameStart", RpcTarget.All);
-            });
-            // if(Input.GetKey(KeyCode.B)){
-            //     photonView.RPC("GameStart", RpcTarget.All);
-            // }
+
         }
         
         
@@ -50,11 +46,21 @@ public class GameStartManager : MonoBehaviourPunCallbacks
     public void GameStart()
     {
         Debug.Log("게임 시작!");
-
-        startbutton.SetActive(false);
+        if(PhotonNetwork.IsMasterClient == false)
+        {
+            startText.SetActive(false);
+        }
         Timemanager.enabled = true;
         EG.gameObject.SetActive(true);
         Timer.SetActive(true);
     }
     #endregion
+
+    void update()
+    {
+        if(Input.GetKey(KeyCode.F1) && PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("GameStart", RpcTarget.All);
+        }
+    }
 }
