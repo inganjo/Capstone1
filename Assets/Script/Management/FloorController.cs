@@ -8,12 +8,12 @@ public class FloorController : MonoBehaviour
     void Start()
     {
         if(ScenarioManager.Instance == null){
-            GameObject[] fireObjects1 = GameObject.FindGameObjectsWithTag("Fire1");
-            foreach (GameObject obj in fireObjects1)
-            {
-                Debug.Log("시나리오"+obj);
-                obj.SetActive(false);
-            }
+            // GameObject[] fireObjects1 = GameObject.FindGameObjectsWithTag("Fire1");
+            // foreach (GameObject obj in fireObjects1)
+            // {
+            //     Debug.Log("시나리오"+obj);
+            //     obj.SetActive(false);
+            // }
             GameObject[] fireObjects2 = GameObject.FindGameObjectsWithTag("Fire2");
             foreach (GameObject obj in fireObjects2)
             {

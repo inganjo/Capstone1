@@ -10,6 +10,7 @@ TagManager:
   - Fire1
   - Fire2
   - Fire3
+  - SPAWNPOINT
   layers:
   - Default
   - TransparentFX

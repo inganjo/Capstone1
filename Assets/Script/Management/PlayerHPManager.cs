@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Unity.VisualScripting;
 
 public class PlayerHPManager : MonoBehaviourPun
 {
@@ -10,6 +11,14 @@ public class PlayerHPManager : MonoBehaviourPun
     public float maxHealth = 100f; // 최대 체력
     public float maxHealHP = 50f;
     public float currentHealth;   // 현재 체력
+
+    public float Firedamage = 20.0f;
+
+    public float SmokeDamage = 5.0f;
+
+    
+
+    
 
     private void Start()
     {
@@ -22,13 +31,25 @@ public class PlayerHPManager : MonoBehaviourPun
         if (currentHealth<=0)
             Die();
     }
+
+    public void OnTriggerStay(Collider other){
+        if(other.gameObject.tag == "Fire1" || other.gameObject.tag == "Fire2" || other.gameObject.tag == "Fire3")
+        {
+            TakeDamage(Firedamage);
+        }
+        else if(other.gameObject.tag =="smoke")
+        {
+            TakeDamage(SmokeDamage);
+        }
+        
+    }
     // 체력을 감소시키는 함수
     [PunRPC]
     public void TakeDamage(float damage)
     {
         if (photonView.IsMine) // 본인의 객체인지 확인
         {
-            currentHealth -= damage;
+            currentHealth -= damage * Time.deltaTime;
 
             if (currentHealth <= 0)
             {
@@ -49,6 +70,7 @@ public class PlayerHPManager : MonoBehaviourPun
             GameObject tombstone = null;
             if (PhotonNetwork.IsConnected)
             {
+                Debug.Log("비석 생성");
                 tombstone = PhotonNetwork.Instantiate(tombstonePrefab.name, transform.position, tombstoneRotation);
             }
             else
@@ -78,6 +100,7 @@ public class PlayerHPManager : MonoBehaviourPun
             if (photonView.IsMine)
             {
                 PhotonNetwork.Destroy(gameObject);
+                TimerManager.instance.TriggerGameOver();
             }
         }
         else
