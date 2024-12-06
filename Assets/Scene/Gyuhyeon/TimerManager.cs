@@ -82,7 +82,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
         
             remainingTime = timeLimit;
 
-
+        startTime = Time.time;
         
         UpdateTimerUIReference();
         if(PhotonNetwork.IsConnected == false || PhotonNetwork.IsMasterClient){

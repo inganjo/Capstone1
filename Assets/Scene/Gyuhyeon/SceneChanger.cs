@@ -42,7 +42,7 @@ public class SceneChanger : MonoBehaviourPunCallbacks
                 if (player != null )
                 {
                     if(photonView.IsMine || PhotonNetwork.IsConnected == false)
-                        player.transform.position = targetPosition;  // 플레이어 위치 이동
+                    player.transform.position = targetPosition;  // 플레이어 위치 이동
                 }   
             }
             SceneManager.sceneLoaded -= OnSceneLoaded;  // 이벤트 등록 해제
