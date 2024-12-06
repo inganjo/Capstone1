@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class PlayerHPManager : MonoBehaviourPun
 {
     [SerializeField] private GameObject tombstonePrefab;
     [SerializeField] private GameObject geometry;
     [SerializeField] private GameObject main;
+    [SerializeField] private Image damageOverlay;
     private bool isDead=false;
 
     [Header("Player Stats")]
@@ -23,6 +25,10 @@ public class PlayerHPManager : MonoBehaviourPun
 
     public float SmokeDamage = 5.0f;
 
+    [Header("Overlay Settings")]
+    public float overlayFadeSpeed = 2f; // 알파값 감소 속도
+    private Color overlayColor;
+
     
 
     
@@ -30,6 +36,12 @@ public class PlayerHPManager : MonoBehaviourPun
     private void Start()
     {
         currentHealth = maxHealth;
+        if (damageOverlay != null)
+        {
+            overlayColor = damageOverlay.color;
+            overlayColor.a = 0;
+            damageOverlay.color = overlayColor;
+        }
     }
 
     private void Update()
@@ -42,6 +54,7 @@ public class PlayerHPManager : MonoBehaviourPun
             HealOverTime();
         }
         timer += Time.deltaTime;
+        UpdateDamageOverlay();
     }
 
     public void OnTriggerStay(Collider other){
@@ -63,10 +76,32 @@ public class PlayerHPManager : MonoBehaviourPun
         {
             currentHealth -= damage * Time.deltaTime;
 
+            if (damageOverlay != null)
+            {
+                overlayColor.a = Mathf.Clamp01(overlayColor.a + 0.5f);
+                damageOverlay.color = overlayColor;
+            }
+
             if (currentHealth <= 0)
             {
                 Die();
             }
+        }
+    }
+
+    private void UpdateDamageOverlay()
+    {
+        if (damageOverlay != null)
+        {
+            if (currentHealth <= 30)
+            {
+                overlayColor.a = 0.5f;
+            }
+            else
+            {
+                overlayColor.a = Mathf.Clamp01(overlayColor.a - Time.deltaTime * overlayFadeSpeed); 
+            }
+            damageOverlay.color = overlayColor;
         }
     }
 
