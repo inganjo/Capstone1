@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class ElevatorGameover : MonoBehaviour
@@ -18,7 +19,7 @@ public class ElevatorGameover : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         // 플레이어가 범위에 들어왔는지 확인
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other.GetComponent<PhotonView>().IsMine)
         {
             if (timerManager != null)
             {
