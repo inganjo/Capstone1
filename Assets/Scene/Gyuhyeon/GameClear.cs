@@ -1,7 +1,8 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameClear : MonoBehaviour
+public class GameClear : MonoBehaviourPunCallbacks
 {
     public Text interactionUIText;
     public KeyCode interactKey = KeyCode.E;
@@ -13,6 +14,7 @@ public class GameClear : MonoBehaviour
     private bool canTeleport = true; // 텔레포트 가능 여부
     private float cooldownTimer = 0f;
     private TimerManager timerManager;
+
 
     void Start()
     {
@@ -49,7 +51,8 @@ public class GameClear : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        
+        if (other.CompareTag("Player") && other.GetComponent<PhotonView>().IsMine)
         {
             isPlayerNear = true;
             playerTransform = other.transform;
@@ -60,7 +63,7 @@ public class GameClear : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other.GetComponent<PhotonView>().IsMine)
         {
             isPlayerNear = false;
             interactionUIText.gameObject.SetActive(false);

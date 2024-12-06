@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class SceneChanger : MonoBehaviour
+public class SceneChanger : MonoBehaviourPunCallbacks
 {
     public string sceneName;  // 전환할 씬의 이름
     public Vector3 targetPosition;  // 씬 전환 후 이동할 좌표
@@ -33,10 +35,15 @@ public class SceneChanger : MonoBehaviour
     {
         if (scene.name == sceneName)  // 현재 로드된 씬이 목표 씬인지 확인
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach(GameObject player in players)
             {
-                player.transform.position = targetPosition;  // 플레이어 위치 이동
+                PhotonView photonView = player.GetComponent<PhotonView>();
+                if (player != null )
+                {
+                    if(photonView.IsMine || PhotonNetwork.IsConnected == false)
+                        player.transform.position = targetPosition;  // 플레이어 위치 이동
+                }   
             }
             SceneManager.sceneLoaded -= OnSceneLoaded;  // 이벤트 등록 해제
         }

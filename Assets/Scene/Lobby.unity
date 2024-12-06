@@ -573,7 +573,7 @@ MonoBehaviour:
   CreateRoom: {fileID: 1305946654}
   roomListItem: {fileID: 5318470242368827749, guid: 76e3fe29f52a7b141b952a26f399f0df, type: 3}
   rtContent: {fileID: 245840292}
-  player: {fileID: 3719342341355765095, guid: 79906f5feeea8e641b3f0ba113fecc51, type: 3}
+  player: {fileID: 2931521565017807475, guid: f5be8b06f677e594e88122ce317af99a, type: 3}
 --- !u!1 &245840291
 GameObject:
   m_ObjectHideFlags: 0

@@ -149,7 +149,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        Debug.Log("남은 시간" + remainingTime);
+        // Debug.Log("남은 시간" + remainingTime);
         if (remainingTime > 0 && !gameOverTriggered)
         {
             // Debug.Log("Update if문 작동중");
