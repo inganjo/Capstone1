@@ -4,7 +4,9 @@ using UnityEngine;
 using Photon.Pun;
 using Unity.VisualScripting;
 using UnityEngine.UI;
-
+using ExitGames.Client.Photon;
+using UnityEngine.SceneManagement;
+using PhotonHashTable = ExitGames.Client.Photon.Hashtable;
 public class PlayerHPManager : MonoBehaviourPun
 {
     [SerializeField] private GameObject tombstonePrefab;
@@ -29,19 +31,30 @@ public class PlayerHPManager : MonoBehaviourPun
     public float overlayFadeSpeed = 2f; // 알파값 감소 속도
     private Color overlayColor;
 
+    PhotonHashTable playerSetting = PhotonNetwork.LocalPlayer.CustomProperties;
+
     
 
     
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        if(PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("HP"))
+        {
+            currentHealth = (float)playerSetting["HP"];
+        }
+        else
+        {
+            currentHealth = maxHealth;
+        }
+        
         if (damageOverlay != null)
         {
             overlayColor = damageOverlay.color;
             overlayColor.a = 0;
             damageOverlay.color = overlayColor;
         }
+
     }
 
     private void Update()
@@ -75,7 +88,9 @@ public class PlayerHPManager : MonoBehaviourPun
         if (photonView.IsMine) 
         {
             currentHealth -= damage * Time.deltaTime;
-
+            playerSetting["HP"] = currentHealth;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(playerSetting);
+            Debug.Log(currentHealth);
             if (damageOverlay != null)
             {
                 overlayColor.a = Mathf.Clamp01(overlayColor.a + 0.5f);
@@ -86,6 +101,17 @@ public class PlayerHPManager : MonoBehaviourPun
             {
                 Die();
             }
+        }
+    }
+
+        void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 씬 변경 후 체력 유지 확인
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("HP"))
+        {
+            
+            currentHealth = (int)PhotonNetwork.LocalPlayer.CustomProperties["HP"];
+            Debug.Log("OnSceneLoaded: "+ currentHealth);
         }
     }
 
