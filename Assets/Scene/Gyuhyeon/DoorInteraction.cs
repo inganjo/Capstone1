@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class DoorInteraction : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class DoorInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other.GetComponent<PhotonView>().IsMine)
         {
             isPlayerNear = true;
             playerTransform = other.transform;
@@ -52,7 +53,7 @@ public class DoorInteraction : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && other.GetComponent<PhotonView>().IsMine)
         {
             isPlayerNear = false;
             interactionUIText.gameObject.SetActive(false);
