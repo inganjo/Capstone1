@@ -91,6 +91,7 @@ public class TimerManager : MonoBehaviourPunCallbacks
         }
         MoveSpawnPoint();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        startTime = Time.time;
     }
 
     void OnDestroy()
