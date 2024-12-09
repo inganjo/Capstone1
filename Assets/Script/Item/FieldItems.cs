@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class FieldItems : MonoBehaviour
 {
@@ -22,6 +23,13 @@ public class FieldItems : MonoBehaviour
 
     public void DestroyItem()
     {
-        Destroy(gameObject);
+        if(PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else{
+            Destroy(gameObject);
+        }
+
     }
 }
