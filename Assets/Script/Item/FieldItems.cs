@@ -23,11 +23,12 @@ public class FieldItems : MonoBehaviour
 
     public void DestroyItem()
     {
-        if(PhotonNetwork.IsConnected)
+        if(PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.Destroy(gameObject);
         }
         else{
+
             Destroy(gameObject);
         }
 
